@@ -1,0 +1,17 @@
+<resources>
+
+    <string name="app_name">Bomba</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="playlists">Bomba</string>
+    <string name="title">Title</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+    <string-array name="slideMenu">
+        <item >Search</item>
+        <item >Playlists</item>
+        <item >News</item>
+    </string-array>
+
+</resources>
