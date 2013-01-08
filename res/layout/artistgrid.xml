@@ -4,16 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
+    <GridView
+        android:id="@+id/lv_countries"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="This is an artist grid" />
-
-    <Button
-        android:id="@+id/btFragB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Click for message" />
+        android:numColumns="3" >
+    </GridView>
 
 </LinearLayout>

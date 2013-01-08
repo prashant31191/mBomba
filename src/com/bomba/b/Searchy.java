@@ -70,15 +70,7 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener {
 
 	}
 
-	public class loadSearched extends AsyncTask<Void, Void, Void> {
 
-		@Override
-		protected Void doInBackground(Void... arg0) {
-
-			return null;
-		}
-
-	}
 
 	public class loadList extends AsyncTask<String, Void, Void> {
 		ArrayList<HashMap<String, String>> what;
