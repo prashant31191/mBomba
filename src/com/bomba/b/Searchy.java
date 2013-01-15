@@ -227,7 +227,7 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener {
 					sing.putExtra("songName", sName);
 					sing.putExtra("url", UR);
 					
-					startActivity(view);
+					//startActivity(view);
 					startService(sing);
 					
 					
