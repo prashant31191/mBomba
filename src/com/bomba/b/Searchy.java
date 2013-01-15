@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.view.View;
 
 import android.widget.ListView;
 //import android.widget.SearchView;
 
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
@@ -23,7 +27,9 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 
+import com.bomba.R;
 import com.bomba.database.DbHelper;
+import com.bomba.services.Mplayer;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.SlidingActivity;
 
@@ -189,8 +195,8 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener {
 				ListAdapter adp = new SimpleCursorAdapter(Searchy.this,
 						R.layout.searchrow, mCursor,
 						new String[] { pickTracks.SONGS_ARTIST_ID,
-								pickTracks.SONGS_NAME }, new int[] { R.id.tvs_a_id,
-								R.id.tv_songs_name });
+								pickTracks.SONGS_NAME, pickTracks.SONGS_LINK }, new int[] { R.id.tvs_a_id,
+								R.id.tv_songs_name,R.id.tv_songs_link});
 				tracks.setAdapter(adp);
 
 				
@@ -206,6 +212,27 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener {
 			mCursor = pickTracks.getSearched(params[0]);
 			Log.v("SEARCHY", mCursor.getCount() + "");
 			startManagingCursor(mCursor);
+			
+			tracks.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int pos, long arg3) {
+					String aI = "http://mysweetandsourgirl.files.wordpress.com/2012/02/article326945_singer-silhouette1.jpg";
+					String sName = "your favorite Song";
+					String UR = "http://semasoftltd.com/rename.mp3";
+					Intent view = new Intent(Searchy.this,Player_View.class);
+					view.putExtra("artistImage", aI);
+					Intent sing = new Intent(Searchy.this, Mplayer.class);
+					sing.putExtra("songName", sName);
+					sing.putExtra("url", UR);
+					
+					startActivity(view);
+					startService(sing);
+					
+					
+				}
+			});
 			return null;
 		}
 	}

@@ -13,6 +13,8 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import com.bomba.R;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;

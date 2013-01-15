@@ -2,6 +2,7 @@ package com.bomba.b;
 
 import android.os.Bundle;
 
+import com.bomba.R;
 import com.slidingmenu.lib.app.SlidingActivity;
 
 public class NowPlaying extends SlidingActivity {

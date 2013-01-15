@@ -6,6 +6,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
+import com.bomba.R;
 import com.slidingmenu.lib.app.SlidingFragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;

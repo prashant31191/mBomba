@@ -3,6 +3,7 @@ package com.bomba.b;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.bomba.R;
 import com.bomba.database.DbHelper;
 
 import android.database.Cursor;

@@ -10,7 +10,7 @@ public final class R {
 	public static final class id {
 		public static final int abs__action_bar_container = 0x7f040028;
 		public static final int normal = 0x7f040001;
-		public static final int slidingmenurowicon = 0x7f04006b;
+		public static final int slidingmenurowicon = 0x7f040077;
 		public static final int abs__search_go_btn = 0x7f040038;
 		public static final int abs__default_activity_button = 0x7f04001f;
 		public static final int homeAsUp = 0x7f040008;
@@ -33,7 +33,7 @@ public final class R {
 		public static final int abs__progress_horizontal = 0x7f040011;
 		public static final int showHome = 0x7f040007;
 		public static final int fullscreen = 0x7f040015;
-		public static final int slidingmenumain = 0x7f040069;
+		public static final int slidingmenumain = 0x7f040075;
 		public static final int abs__home = 0x7f04000c;
 		public static final int abs__search_src_text = 0x7f040035;
 		public static final int abs__search_mag_icon = 0x7f040033;
@@ -63,8 +63,8 @@ public final class R {
 		public static final int abs__shortcut = 0x7f040026;
 		public static final int abs__action_menu_presenter = 0x7f04000f;
 		public static final int abs__textButton = 0x7f04001a;
-		public static final int slidingmenulayout = 0x7f04006a;
-		public static final int slidingmenurowtitle = 0x7f04006c;
+		public static final int slidingmenulayout = 0x7f040076;
+		public static final int slidingmenurowtitle = 0x7f040078;
 		public static final int abs__titleDivider = 0x7f040023;
 		public static final int abs__expand_activities_button = 0x7f04001d;
 		public static final int abs__submit_area = 0x7f040037;
@@ -200,8 +200,8 @@ public final class R {
 		public static final int abs__dialog_title_holo = 0x7f03000a;
 		public static final int abs__action_menu_layout = 0x7f030005;
 		public static final int abs__action_mode_bar = 0x7f030006;
-		public static final int sherlock_spinner_item = 0x7f030031;
-		public static final int shadow = 0x7f03002f;
+		public static final int sherlock_spinner_item = 0x7f030032;
+		public static final int shadow = 0x7f030030;
 		public static final int abs__activity_chooser_view = 0x7f030008;
 		public static final int abs__search_view = 0x7f030015;
 		public static final int abs__popup_menu_item_layout = 0x7f03000f;
@@ -211,19 +211,19 @@ public final class R {
 		public static final int abs__list_menu_item_radio = 0x7f03000e;
 		public static final int abs__action_mode_close_item = 0x7f030007;
 		public static final int abs__activity_chooser_view_list_item = 0x7f030009;
-		public static final int slidingmenumainlist = 0x7f030036;
+		public static final int slidingmenumainlist = 0x7f030037;
 		public static final int abs__screen_simple_overlay_action_mode = 0x7f030013;
 		public static final int abs__screen_action_bar = 0x7f030010;
 		public static final int list = 0x7f030027;
-		public static final int slidingmenurow = 0x7f030037;
-		public static final int sherlock_spinner_dropdown_item = 0x7f030030;
+		public static final int slidingmenurow = 0x7f030038;
+		public static final int sherlock_spinner_dropdown_item = 0x7f030031;
 		public static final int abs__search_dropdown_item_icons_2line = 0x7f030014;
 		public static final int abs__action_bar_title_item = 0x7f030003;
 		public static final int abs__screen_action_bar_overlay = 0x7f030011;
 		public static final int abs__list_menu_item_checkbox = 0x7f03000b;
 		public static final int abs__simple_dropdown_hint = 0x7f030016;
 		public static final int abs__list_menu_item_icon = 0x7f03000c;
-		public static final int slidingmenumain = 0x7f030035;
+		public static final int slidingmenumain = 0x7f030036;
 		public static final int abs__list_menu_item_layout = 0x7f03000d;
 		public static final int abs__screen_simple = 0x7f030012;
 		public static final int abs__action_bar_tab = 0x7f030001;
