@@ -75,7 +75,7 @@ public class MainActivity extends SlidingActivity implements TabListener {
 			}
 		});
 
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		//getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		// sm.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
 
 		// getSupportActionBar().setDisplayHomeAsUpEnabled(true);

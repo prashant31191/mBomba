@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bomba.R;
 import com.facebook.*;
+import com.facebook.model.GraphUser;
 
 public class Login extends Activity {
 
@@ -37,14 +38,14 @@ public class Login extends Activity {
 					Request.executeMeRequestAsync(session,
 							new Request.GraphUserCallback() {
 
+								
+
 								@Override
 								public void onCompleted(GraphUser user,
 										Response response) {
 									tv.setText(user.getName()+", Thank you for loggin in with facebook");
 									startActivity(new Intent(Login.this, MainActivity.class));
-								
-											
-
+									
 								}
 							});
 				}

@@ -56,7 +56,7 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener {
 		sm.setFadeDegree(0.35f);
 		sm.setMenu(R.layout.slide);
 
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		//getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		init();
 
 	}
