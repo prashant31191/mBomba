@@ -119,7 +119,7 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener {
 				getSupportActionBar().getThemedContext());
 		searchView.setQueryHint("Search for Track");
 		menu.add(0, 1, 1, "playlist")
-				.setIcon(R.drawable.ic_action_search)
+				.setIcon(R.drawable.action_bar_add_playlist)
 				.setActionView(searchView)
 				.setShowAsAction(
 						MenuItem.SHOW_AS_ACTION_IF_ROOM
