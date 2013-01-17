@@ -58,6 +58,29 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener {
 
 		//getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		init();
+		
+		//set up the side list
+		ListView lv = (ListView) findViewById(R.id.slideList);
+		lv.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
+					long arg3) {
+				switch (pos) {
+				case 0:
+					Intent n = new Intent(Searchy.this, SideSearch.class);
+					n.putExtra("p", "Search:");
+					startActivity(n);
+					break;
+				case 1:
+					startActivity(new Intent(Searchy.this, MainActivity.class));
+					break;
+				case 2:
+					break;
+
+				}
+			}
+		});
 
 	}
 
