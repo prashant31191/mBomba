@@ -105,6 +105,12 @@ public class MainActivity extends SlidingActivity implements TabListener {
 		init();
 
 	}
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		Log.v("theback", "theback has been pressed");
+	}
 
 	private void init() {
 		ListView playlists = (ListView) findViewById(R.id.listPlayLists);

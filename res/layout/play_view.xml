@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/defaultshadow"
+    android:orientation="vertical"
+    android:weightSum="10" >
+
+    
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:weightSum="10" >
+
+        <LinearLayout
+            android:id="@+id/adTwoLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="8" >
+
+            <Button
+                android:id="@+id/btNowPlayingAdd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="add" />
+
+            <Button
+                android:id="@+id/btNowPlayingLike"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                 />
+
+            <Button
+                android:id="@+id/btNowPlayingRelated"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                 />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:paddingBottom="5dip" >
+
+            <ImageView
+                android:id="@+id/artistPic"
+                android:layout_width="200dip"
+                android:layout_height="200dip"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:src="@drawable/ic_launcher" />
+
+            <SeekBar
+                android:id="@+id/nowPlayingBar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+            </SeekBar>
+>
+
+            <LinearLayout
+                android:id="@+id/linearLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <ImageButton
+                    android:id="@+id/iBAdd"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:src="@drawable/playcontroladd" />
+
+                <ImageButton
+                    android:id="@+id/iBprevious"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:src="@drawable/playcontrolback" />
+
+                <ImageButton
+                    android:id="@+id/iBplay"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:src="@drawable/playcontrolplay" />
+
+                <ImageButton
+                    android:id="@+id/iBnext"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:src="@drawable/playcontrolforward" />
+
+                <ImageButton
+                    android:id="@+id/iBvol"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:src="@drawable/playcontrolvolume" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
