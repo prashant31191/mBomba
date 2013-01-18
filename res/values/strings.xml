@@ -11,7 +11,6 @@
     <string-array name="slideMenu">
         <item >Search</item>
         <item >Playlists</item>
-        <item >News</item>
     </string-array>
     <string name="app_id">280604498727857</string>
 

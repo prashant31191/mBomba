@@ -16,6 +16,12 @@ import com.actionbarsherlock.view.MenuItem;
 
 import com.bomba.R;
 import com.bomba.database.DbHelper;
+import com.easy.facebook.android.apicall.GraphApi;
+import com.easy.facebook.android.data.User;
+import com.easy.facebook.android.error.EasyFacebookError;
+import com.easy.facebook.android.facebook.FBLoginManager;
+import com.easy.facebook.android.facebook.Facebook;
+import com.easy.facebook.android.facebook.LoginListener;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.SlidingActivity;
 
@@ -36,8 +42,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends SlidingActivity implements TabListener {
+public class MainActivity extends SlidingActivity implements TabListener, LoginListener {
 	DbHelper pickLists;
+	
+	public final String fbAppID = "280604498727857";
+	private FBLoginManager fbl;
+	
+			
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -74,37 +85,76 @@ public class MainActivity extends SlidingActivity implements TabListener {
 				}
 			}
 		});
+		
+		String [] permissions = {
+			    "user_about_me",
+			    "user_activities",
+			    "user_birthday",
+			    "user_checkins",
+			    "user_education_history",
+			    "user_events",
+			    "user_groups",
+			    "user_hometown",
+			    "user_interests",
+			    "user_likes",
+			    "user_location",
+			    "user_notes",
+			    "user_online_presence",
+			    "user_photo_video_tags",
+			    "user_photos",
+			    "user_relationships",
+			    "user_relationship_details",
+			    "user_religion_politics",
+			    "user_status",
+			    "user_videos",
+			    "user_website",
+			    "user_work_history",
+			    "email",
 
-		//getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		// sm.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+			    "read_friendlists",
+			    "read_insights",
+			    "read_mailbox",
+			    "read_requests",
+			    "read_stream",
+			    "xmpp_login",
+			    "ads_management",
+			    "create_event",
+			    "manage_friendlists",
+			    "manage_notifications",
+			    "offline_access",
+			    "publish_checkins",
+			    "publish_stream",
+			    "rsvp_event",
+			    "sms",
+			    //"publish_actions",
 
-		// getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		// getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		// ActionBar.Tab tabP = getSupportActionBar().newTab();
-		// tabP.setText("Playlists");
-		// tabP.setTabListener(this);
-		// getSupportActionBar().addTab(tabP);
-		//
-		// ActionBar.Tab tabart = getSupportActionBar().newTab();
-		// tabart.setText("Artists");
-		// tabart.setTabListener(this);
-		// getSupportActionBar().addTab(tabart);
-		//
-		// ActionBar.Tab tabalbs = getSupportActionBar().newTab();
-		// tabalbs.setText("Albums");
-		// tabalbs.setTabListener(this);
-		// getSupportActionBar().addTab(tabalbs);
-		//
-		// ActionBar.Tab tabtracks = getSupportActionBar().newTab();
-		// tabtracks.setText("Tracks");
-		// tabtracks.setTabListener(this);
-		// getSupportActionBar().addTab(tabtracks);
-		//
-		// getSupportActionBar().setStackedBackgroundDrawable(
-		// getResources().getDrawable(R.drawable.tab_bar_background));
+			    "manage_pages"
+
+			  };
+		fbl = new FBLoginManager(this,
+				R.layout.activity_main,
+				fbAppID, permissions);
+		if(fbl.existsSavedFacebook())
+		{
+			fbl.loadFacebook();
+		}
+		else 
+		{
+			fbl.login();
+		}
+		
+
+		
 		init();
 
 	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		fbl.loginSuccess(data);
+	}
+	
+	
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
@@ -247,6 +297,52 @@ public class MainActivity extends SlidingActivity implements TabListener {
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		pickLists.close();
+	}
+	class FbThread extends Thread{
+		Facebook fb;
+		User user = new User(); 
+
+		FbThread(Facebook fb){
+		this.fb = fb;
+		}
+
+		public void run(){
+		try{
+		GraphApi graphApi = new GraphApi(fb);
+		user = graphApi.getMyAccountInfo();
+		//update your status if logged in
+		graphApi.setStatus("Has logged into Bomba on Facebook");
+		} catch(EasyFacebookError e){
+		Log.d("TAG: ", e.toString());
+		} 
+		}
+
+		public User getUser(){
+		return user;
+		}
+		}
+
+		public void loginSuccess(Facebook facebook) {
+		FbThread fbThread = new FbThread(facebook);
+		User user = fbThread.getUser();
+
+		fbThread.start();
+
+		fbl.displayToast("Hey, " + user.getFirst_name() + "! Login success!");
+		}
+
+	
+
+	@Override
+	public void logoutSuccess() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void loginFail() {
+		fbl.displayToast("this was an epic fail at logging in");
+		
 	}
 
 }
