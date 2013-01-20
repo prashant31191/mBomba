@@ -188,6 +188,29 @@ public class DbHelper {
 		return bombaDatabase.insert(Bomba_Songs, null, songValues);
 	}
 
+	public long AddSongsToLocalMaster(int id, String track_title,
+			String a_legal, String s_name, String featured, String a_title,
+			String t_number, String genre, String cut, String producer,
+			String studio, String management, String label, String i_file,
+			String t_file) {
+		ContentValues masterSong = new ContentValues();
+		masterSong.put(TRACK_TITLE, track_title);
+		masterSong.put(A_LEGAL_NAME, a_legal);
+		masterSong.put(A_STAGE_NAME, s_name);
+		masterSong.put(FEATURED_A, featured);
+		masterSong.put(ALBUM_TITLE, a_title);
+		masterSong.put(TRACK_NUMBER, t_number);
+		masterSong.put(GENRE, genre);
+		masterSong.put(CUT, cut);
+		masterSong.put(PRODUCER, producer);
+		masterSong.put(STUDIO, studio);
+		masterSong.put(MANAGEMENT, management);
+		masterSong.put(LABEL, label);
+		masterSong.put(IMAGE_file, i_file);
+		masterSong.put(TRACK_file, t_file);
+		return bombaDatabase.insert(Bomba_master_songs, null,masterSong);
+	}
+
 	public Cursor getSearched(String s_name) {
 		String[] columns = new String[] { SONGS_ARTIST_ID, SONGS_NAME,
 				SONGS_LINK, SONGS_ID };
