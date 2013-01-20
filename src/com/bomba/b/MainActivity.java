@@ -42,13 +42,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends SlidingActivity implements TabListener, LoginListener {
+public class MainActivity extends SlidingActivity implements TabListener,
+		LoginListener {
 	DbHelper pickLists;
-	
+
 	public final String fbAppID = "280604498727857";
 	private FBLoginManager fbl;
-	
-			
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -85,76 +84,44 @@ public class MainActivity extends SlidingActivity implements TabListener, LoginL
 				}
 			}
 		});
-		
-		String [] permissions = {
-			    "user_about_me",
-			    "user_activities",
-			    "user_birthday",
-			    "user_checkins",
-			    "user_education_history",
-			    "user_events",
-			    "user_groups",
-			    "user_hometown",
-			    "user_interests",
-			    "user_likes",
-			    "user_location",
-			    "user_notes",
-			    "user_online_presence",
-			    "user_photo_video_tags",
-			    "user_photos",
-			    "user_relationships",
-			    "user_relationship_details",
-			    "user_religion_politics",
-			    "user_status",
-			    "user_videos",
-			    "user_website",
-			    "user_work_history",
-			    "email",
 
-			    "read_friendlists",
-			    "read_insights",
-			    "read_mailbox",
-			    "read_requests",
-			    "read_stream",
-			    "xmpp_login",
-			    "ads_management",
-			    "create_event",
-			    "manage_friendlists",
-			    "manage_notifications",
-			    "offline_access",
-			    "publish_checkins",
-			    "publish_stream",
-			    "rsvp_event",
-			    "sms",
-			    //"publish_actions",
+		String[] permissions = { "user_about_me", "user_activities",
+				"user_birthday", "user_checkins", "user_education_history",
+				"user_events", "user_groups", "user_hometown",
+				"user_interests", "user_likes", "user_location", "user_notes",
+				"user_online_presence", "user_photo_video_tags", "user_photos",
+				"user_relationships", "user_relationship_details",
+				"user_religion_politics", "user_status", "user_videos",
+				"user_website", "user_work_history", "email",
 
-			    "manage_pages"
+				"read_friendlists", "read_insights", "read_mailbox",
+				"read_requests", "read_stream", "xmpp_login", "ads_management",
+				"create_event", "manage_friendlists", "manage_notifications",
+				"offline_access", "publish_checkins", "publish_stream",
+				"rsvp_event", "sms",
+				// "publish_actions",
 
-			  };
-		fbl = new FBLoginManager(this,
-				R.layout.activity_main,
-				fbAppID, permissions);
-		if(fbl.existsSavedFacebook())
-		{
+				"manage_pages"
+
+		};
+		fbl = new FBLoginManager(this, R.layout.activity_main, fbAppID,
+				permissions);
+		if (fbl.existsSavedFacebook()) {
 			fbl.loadFacebook();
-		}
-		else 
-		{
+		} else {
 			fbl.login();
 		}
-		
 
-		
 		init();
 
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		fbl.loginSuccess(data);
+	
 	}
-	
-	
+
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
@@ -212,7 +179,7 @@ public class MainActivity extends SlidingActivity implements TabListener, LoginL
 			try {
 				HttpClient getSongs = new DefaultHttpClient();
 				HttpGet request = new HttpGet(
-						"http://semasoftltd.com/songs_syncer.php");
+						"http://41.139.204.179/select.php");
 				HttpResponse resp = getSongs.execute(request);
 				String jsonPayload = EntityUtils.toString(resp.getEntity());
 				JSONObject parentObject = new JSONObject(jsonPayload);
@@ -221,9 +188,22 @@ public class MainActivity extends SlidingActivity implements TabListener, LoginL
 				for (int i = 0; i < parentArray.length(); i++) {
 					childObject = parentArray.getJSONObject(i).getJSONObject(
 							"song");
-					pickLists.AddSongsToLocal(childObject.getInt("song_id"),
-							childObject.getString("song_name"),
-							childObject.getString("song_link"));
+					pickLists.open();
+					pickLists.AddSongsToLocalMaster(childObject.getInt("_id"),
+							childObject.getString("track_title"),
+							childObject.getString("a_legal_name"),
+							childObject.getString("a_stage_name"),
+							childObject.getString("featured_a"),
+							childObject.getString("album_title"),
+							childObject.getString("track_number"),
+							childObject.getString("genre"),
+							childObject.getString("cut"),
+							childObject.getString("producer"),
+							childObject.getString("studio"),
+							childObject.getString("management"),
+							childObject.getString("label"),
+							childObject.getString("image_file"),
+							childObject.getString("track_file"));
 
 				}
 				Log.v("MAINACTIVITY", "songs added to the database");
@@ -298,51 +278,50 @@ public class MainActivity extends SlidingActivity implements TabListener, LoginL
 		super.onDestroy();
 		pickLists.close();
 	}
-	class FbThread extends Thread{
+
+	class FbThread extends Thread {
 		Facebook fb;
-		User user = new User(); 
+		User user = new User();
 
-		FbThread(Facebook fb){
-		this.fb = fb;
+		FbThread(Facebook fb) {
+			this.fb = fb;
 		}
 
-		public void run(){
-		try{
-		GraphApi graphApi = new GraphApi(fb);
-		user = graphApi.getMyAccountInfo();
-		//update your status if logged in
-		graphApi.setStatus("Has logged into Bomba on Facebook");
-		} catch(EasyFacebookError e){
-		Log.d("TAG: ", e.toString());
-		} 
+		public void run() {
+			try {
+				GraphApi graphApi = new GraphApi(fb);
+				user = graphApi.getMyAccountInfo();
+				// update your status if logged in
+				graphApi.setStatus("Has logged into Bomba on Facebook");
+			} catch (EasyFacebookError e) {
+				Log.d("TAG: ", e.toString());
+			}
 		}
 
-		public User getUser(){
-		return user;
+		public User getUser() {
+			return user;
 		}
-		}
+	}
 
-		public void loginSuccess(Facebook facebook) {
+	public void loginSuccess(Facebook facebook) {
 		FbThread fbThread = new FbThread(facebook);
 		User user = fbThread.getUser();
 
 		fbThread.start();
 
 		fbl.displayToast("Hey, " + user.getFirst_name() + "! Login success!");
-		}
-
-	
+	}
 
 	@Override
 	public void logoutSuccess() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void loginFail() {
 		fbl.displayToast("this was an epic fail at logging in");
-		
+
 	}
 
 }

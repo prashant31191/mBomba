@@ -18,8 +18,10 @@ import android.widget.ListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListAdapter;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
@@ -56,10 +58,10 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener {
 		sm.setFadeDegree(0.35f);
 		sm.setMenu(R.layout.slide);
 
-		//getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		// getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		init();
-		
-		//set up the side list
+
+		// set up the side list
 		ListView lv = (ListView) findViewById(R.id.slideList);
 		lv.setOnItemClickListener(new OnItemClickListener() {
 
@@ -98,8 +100,6 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener {
 		}
 
 	}
-
-
 
 	public class loadList extends AsyncTask<String, Void, Void> {
 		ArrayList<HashMap<String, String>> what;
@@ -212,19 +212,17 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener {
 						Searchy.this,
 						"We don't have any tracks with that name but we will look around",
 						Toast.LENGTH_LONG).show();
-			}
-			else
-			{
+			} else {
 				ListAdapter adp = new SimpleCursorAdapter(Searchy.this,
-						R.layout.searchrow, mCursor,
-						new String[] { pickTracks.SONGS_ARTIST_ID,
-								pickTracks.SONGS_NAME, pickTracks.SONGS_LINK }, new int[] { R.id.tvs_a_id,
-								R.id.tv_songs_name,R.id.tv_songs_link});
+						R.layout.searchrow, mCursor, new String[] {
+								pickTracks.TRACKS_ID, pickTracks.TRACK_TITLE,
+								pickTracks.TRACK_file }, new int[] {
+								R.id.tvs_a_id, R.id.tv_songs_name,
+								R.id.tv_songs_link });
 				tracks.setAdapter(adp);
 
-				
 			}
-			
+
 			super.onPostExecute(result);
 		}
 
@@ -235,25 +233,29 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener {
 			mCursor = pickTracks.getSearched(params[0]);
 			Log.v("SEARCHY", mCursor.getCount() + "");
 			startManagingCursor(mCursor);
-			
+
 			tracks.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int pos, long arg3) {
-					String aI = "http://mysweetandsourgirl.files.wordpress.com/2012/02/article326945_singer-silhouette1.jpg";
+				public void onItemClick(AdapterView<?> arg0, View v, int pos,
+						long arg3) {
+
+					RelativeLayout relly = (RelativeLayout) v;
+					TextView tv = ((TextView) findViewById(R.id.tv_songs_link));
+					String me = tv.getText().toString();
+
+					String aI = "http://41.139.204.179/music/" + me;
 					String sName = "your favorite Song";
-					String UR = "http://semasoftltd.com/rename.mp3";
-					Intent view = new Intent(Searchy.this,Player_View.class);
+					String UR = "http://41.139.204.179/music/" + me+".mp3";
+					Intent view = new Intent(Searchy.this, Player_View.class);
 					view.putExtra("artistImage", aI);
 					Intent sing = new Intent(Searchy.this, Mplayer.class);
 					sing.putExtra("songName", sName);
 					sing.putExtra("url", UR);
-					
-					//startActivity(view);
+
+					// startActivity(view);
 					startService(sing);
-					
-					
+
 				}
 			});
 			return null;

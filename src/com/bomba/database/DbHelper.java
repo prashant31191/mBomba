@@ -20,7 +20,7 @@ public class DbHelper {
 
 	// name of the database
 	public static String DATABASE_NAME = "bomba_content";
-	public static int DATABASE_VERSION = 14;
+	public static int DATABASE_VERSION = 15;
 
 	// create the table names
 	public static final String PLAYLIST_TABLE = "tbl_playlist";
@@ -208,15 +208,19 @@ public class DbHelper {
 		masterSong.put(LABEL, label);
 		masterSong.put(IMAGE_file, i_file);
 		masterSong.put(TRACK_file, t_file);
-		return bombaDatabase.insert(Bomba_master_songs, null,masterSong);
+		return bombaDatabase.insert(Bomba_master_songs, null, masterSong);
 	}
 
 	public Cursor getSearched(String s_name) {
-		String[] columns = new String[] { SONGS_ARTIST_ID, SONGS_NAME,
-				SONGS_LINK, SONGS_ID };
-		Cursor getSearched = bombaDatabase.query(Bomba_Songs, columns,
-				SONGS_NAME + " LIKE \"%" + s_name + "%\"", null, null, null,
-				null, null);
+		String[] columns = new String[] { TRACKS_ID, TRACK_TITLE, TRACK_file,
+				IMAGE_file };
+		 Cursor getSearched = bombaDatabase.query(Bomba_master_songs, columns,
+		 TRACK_TITLE + " LIKE \"%" + s_name + "%\"", null, null, null,
+		 null, null);
+//		Cursor getSearched = bombaDatabase
+//				.rawQuery(
+//						"select * from tbl_master where track_title = ?",
+//						new String []{s_name});
 		return getSearched;
 	}
 
