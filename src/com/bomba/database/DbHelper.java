@@ -20,7 +20,7 @@ public class DbHelper {
 
 	// name of the database
 	public static String DATABASE_NAME = "bomba_content";
-	public static int DATABASE_VERSION = 13;
+	public static int DATABASE_VERSION = 14;
 
 	// create the table names
 	public static final String PLAYLIST_TABLE = "tbl_playlist";
@@ -28,6 +28,7 @@ public class DbHelper {
 	public static final String TRACKS_TABLE = "tbl_tracks";
 	public static final String Bomba_Artists = "tbl_artists";
 	public static final String Bomba_Songs = "tbl_songs";
+	public static final String Bomba_master_songs = "tbl_master";
 
 	// name the columns for the artist tables
 	public static final String ARTISTS_ID = "_id";
@@ -38,10 +39,27 @@ public class DbHelper {
 	// create the columns for the songs table
 	public static final String SONGS_ID = "_id";
 	public static final String SONGS_NAME = "songs_name";
-	public static final String SONGS_ARTIST_ID = "artist_id";
+	public static final String SONGS_ARTIST_ID = "artist_name";
 	public static final String SONGS_LINK = "song_stream_link";
 	public static final String SONGS_LENGTH = "song_length";
 	public static final String ADD_SONG_DATE = "add_song_date";
+
+	// create the colums for the music master table
+	public static final String ITEM_ID = "_id";
+	public static final String TRACK_TITLE = "track_title";
+	public static final String A_LEGAL_NAME = "a_legal_name";
+	public static final String A_STAGE_NAME = "a_stage_name";
+	public static final String FEATURED_A = "featured_a";
+	public static final String ALBUM_TITLE = "album_title";
+	public static final String TRACK_NUMBER = "track_number";
+	public static final String GENRE = "genre";
+	public static final String CUT = "cut";
+	public static final String PRODUCER = "producer";
+	public static final String STUDIO = "studio";
+	public static final String MANAGEMENT = "management";
+	public static final String LABEL = "label";
+	public static final String IMAGE_file = "image_label";
+	public static final String TRACK_file = "image_file";
 
 	// name the rows in the playlist table
 	public static final String PLAYLIST_ROW_ID = "_id";
@@ -103,6 +121,15 @@ public class DbHelper {
 					+ SONGS_NAME + " TEXT, " + ADD_SONG_DATE + " INTEGER, "
 					+ SONGS_ARTIST_ID + " INTEGER, " + SONGS_LINK + " TEXT, "
 					+ SONGS_LENGTH + " INTEGER);");
+			database.execSQL("CREATE TABLE " + Bomba_master_songs + "("
+					+ ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+					+ TRACK_TITLE + " TEXT, " + A_LEGAL_NAME + " TEXT, "
+					+ A_STAGE_NAME + " TEXT, " + FEATURED_A + " TEXT, "
+					+ ALBUM_TITLE + " TEXT, " + TRACK_NUMBER + " INTEGER, "
+					+ GENRE + " TEXT, " + CUT + " TEXT, " + PRODUCER
+					+ " TEXT, " + STUDIO + " TEXT, " + MANAGEMENT + " TEXT, "
+					+ LABEL + " TEXT, " + IMAGE_file + " TEXT, " + TRACK_file
+					+ " TEXT);");
 			Log.v(TAG, "db CREATED");
 
 		}
@@ -115,6 +142,7 @@ public class DbHelper {
 			db.execSQL("DROP TABLE IF EXISTS " + TRACKS_TABLE);
 			db.execSQL("DROP TABLE IF EXISTS " + Bomba_Songs);
 			db.execSQL("DROP TABLE IF EXISTS " + Bomba_Artists);
+			db.execSQL("DROP TABLE IF EXISTS " + Bomba_master_songs);
 			onCreate(db);
 		}
 
@@ -164,8 +192,8 @@ public class DbHelper {
 		String[] columns = new String[] { SONGS_ARTIST_ID, SONGS_NAME,
 				SONGS_LINK, SONGS_ID };
 		Cursor getSearched = bombaDatabase.query(Bomba_Songs, columns,
-				SONGS_NAME + " LIKE \"%" + s_name + "%\"", null, null, null, null,
-				null);
+				SONGS_NAME + " LIKE \"%" + s_name + "%\"", null, null, null,
+				null, null);
 		return getSearched;
 	}
 
