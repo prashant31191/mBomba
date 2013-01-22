@@ -26,6 +26,7 @@ import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.SlidingActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ public class MainActivity extends SlidingActivity implements TabListener,
 
 	public final String fbAppID = "280604498727857";
 	private FBLoginManager fbl;
+	SharedPreferences prefs;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,8 @@ public class MainActivity extends SlidingActivity implements TabListener,
 		sm.setShadowDrawable(R.drawable.shadow);
 		sm.setFadeDegree(0.35f);
 		sm.setMenu(R.layout.slide);
+		prefs = getApplicationContext().getSharedPreferences("meprefs", 0);
+		
 
 		ListView lv = (ListView) findViewById(R.id.slideList);
 		lv.setOnItemClickListener(new OnItemClickListener() {
@@ -292,7 +296,8 @@ public class MainActivity extends SlidingActivity implements TabListener,
 				GraphApi graphApi = new GraphApi(fb);
 				user = graphApi.getMyAccountInfo();
 				// update your status if logged in
-				graphApi.setStatus("Has logged into Bomba on Facebook");
+				//graphApi.setStatus("Has logged into Bomba on Facebook");
+				Log.v("FACEBOOK", user.toString());
 			} catch (EasyFacebookError e) {
 				Log.d("TAG: ", e.toString());
 			}
@@ -309,7 +314,7 @@ public class MainActivity extends SlidingActivity implements TabListener,
 
 		fbThread.start();
 
-		fbl.displayToast("Hey, " + user.getFirst_name() + "! Login success!");
+		fbl.displayToast("Hey, " + user.getName() + "! Login success!");
 	}
 
 	@Override

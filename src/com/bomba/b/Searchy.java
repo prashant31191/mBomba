@@ -215,7 +215,7 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener {
 			} else {
 				ListAdapter adp = new SimpleCursorAdapter(Searchy.this,
 						R.layout.searchrow, mCursor, new String[] {
-								pickTracks.TRACKS_ID, pickTracks.TRACK_TITLE,
+								pickTracks.A_STAGE_NAME, pickTracks.TRACK_TITLE,
 								pickTracks.TRACK_file }, new int[] {
 								R.id.tvs_a_id, R.id.tv_songs_name,
 								R.id.tv_songs_link });

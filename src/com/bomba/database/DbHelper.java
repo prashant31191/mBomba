@@ -20,7 +20,7 @@ public class DbHelper {
 
 	// name of the database
 	public static String DATABASE_NAME = "bomba_content";
-	public static int DATABASE_VERSION = 15;
+	public static int DATABASE_VERSION = 17;
 
 	// create the table names
 	public static final String PLAYLIST_TABLE = "tbl_playlist";
@@ -100,7 +100,7 @@ public class DbHelper {
 			database.execSQL("CREATE TABLE " + PLAYLIST_DATA + " ("
 					+ PLAYLIST_DATA_TRACK_ID + " TEXT NOT NULL, "
 					+ PLAYLIST_DATA_PLAYLIST_ID + " TEXT NOT NULL,"
-					+ PLAYLIST_DATA_TRACK_NAME + " TEXT NOT NULL);");
+					+ PLAYLIST_DATA_TRACK_NAME + " TEXT NOT NULL UNIQUE);");
 			database.execSQL("CREATE TABLE " + PLAYLIST_TABLE + " ("
 					+ PLAYLIST_ROW_ID
 					+ " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
@@ -167,7 +167,7 @@ public class DbHelper {
 	}
 
 	// method to creae playlists
-	public long CreatePlayList(String pname) {
+	public long CreatePlayList(String pname) throws SQLException {
 		// creating name value pairs for inserting to the database
 		ContentValues playlistcv = new ContentValues();
 		// loading the nave value pair
@@ -212,15 +212,16 @@ public class DbHelper {
 	}
 
 	public Cursor getSearched(String s_name) {
-		String[] columns = new String[] { TRACKS_ID, TRACK_TITLE, TRACK_file,
-				IMAGE_file };
-		 Cursor getSearched = bombaDatabase.query(Bomba_master_songs, columns,
-		 TRACK_TITLE + " LIKE \"%" + s_name + "%\"", null, null, null,
-		 null, null);
-//		Cursor getSearched = bombaDatabase
-//				.rawQuery(
-//						"select * from tbl_master where track_title = ?",
-//						new String []{s_name});
+		String[] columns = new String[] {ITEM_ID, A_STAGE_NAME, TRACK_TITLE,
+				TRACK_file, IMAGE_file };
+//		Cursor getSearched = bombaDatabase.query(Bomba_master_songs, columns,
+//				TRACK_TITLE + " LIKE \"%" + s_name + "%\"", null, null, null,
+//				null, null);
+		 Cursor getSearched = bombaDatabase
+		 .rawQuery(
+				 "select * from tbl_master where track_title LIKE '%"+s_name+"%' or a_stage_name LIKE '%"+s_name+"'", null);
+//		 "select * from tbl_master", null);
+		 Log.v("DATABASE", "the search has been done: " + getSearched.getCount());
 		return getSearched;
 	}
 
