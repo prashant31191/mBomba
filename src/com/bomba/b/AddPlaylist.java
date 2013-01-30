@@ -71,8 +71,10 @@ public class AddPlaylist extends Activity implements OnClickListener {
 						Toast.makeText(AddPlaylist.this,
 								Pname + " added to playlists",
 								Toast.LENGTH_SHORT).show();
-						startActivity(new Intent(AddPlaylist.this,
-								MainActivity.class));
+						Intent act =new Intent(AddPlaylist.this,
+								MainActivity.class);
+						act.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						startActivity(act);
 
 					}
 

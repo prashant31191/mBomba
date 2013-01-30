@@ -317,7 +317,12 @@ public class MainActivity extends SlidingActivity implements TabListener,
 
 		fbThread.start();
 
-		fbl.displayToast("Hey, " + user.getName() + "! Login success!");
+		fbl.displayToast("Thank  you for logging into Bomba");
+	}
+	@Override
+	protected void onResume() {
+		
+		super.onResume();
 	}
 
 	@Override
