@@ -39,7 +39,8 @@ import com.bomba.services.Mplayer;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.SlidingActivity;
 
-public class Searchy extends SlidingActivity implements OnQueryTextListener, OnClickListener {
+public class Searchy extends SlidingActivity implements OnQueryTextListener,
+		OnClickListener {
 	ListView tracks;
 	String pls;
 	Bundle m;
@@ -93,7 +94,7 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener, OnC
 
 	private void init() {
 		bPrev = (Button) findViewById(R.id.Previous);
-		bStop = (Button)findViewById(R.id.Stop);
+		bStop = (Button) findViewById(R.id.Stop);
 		bNext = (Button) findViewById(R.id.Next);
 		bPrev.setOnClickListener(this);
 		bStop.setOnClickListener(this);
@@ -101,15 +102,19 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener, OnC
 		tracks = (ListView) findViewById(R.id.listofTracks);
 		pickTracks = new DbHelper(Searchy.this);
 		pickTracks.open();
-		//if (pickTracks.DoesPlaylistExist(pls)) {
-			loadList l = new loadList();
-			l.execute(pls);
-		//} else {
-			Toast.makeText(Searchy.this,
-					"Please search for a track to add to this playlist",
-					Toast.LENGTH_LONG).show();
-		//}
+		initpl();
 
+	}
+
+	private void initpl() {
+		// if (pickTracks.DoesPlaylistExist(pls)) {
+		loadList l = new loadList();
+		l.execute(pls);
+		// } else {
+		Toast.makeText(Searchy.this,
+				"Please search for a track to add to this playlist",
+				Toast.LENGTH_LONG).show();
+		// }
 	}
 
 	public class loadList extends AsyncTask<String, Void, Void> {
@@ -120,7 +125,6 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener, OnC
 			pickTracks = new DbHelper(Searchy.this);
 			pickTracks.open();
 			what = pickTracks.getTracksInList(st[0]);
-
 			pickTracks.close();
 
 			return null;
@@ -131,10 +135,11 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener, OnC
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			if (what != null) {
-				Log.v("SEARCHYLOADER", what.size()+"");
+				Log.v("SEARCHYLOADER", what.size() + "");
 				SimpleAdapter adp = new SimpleAdapter(Searchy.this, what,
-						android.R.layout.simple_list_item_2, new String[] {
-								pickTracks.A_STAGE_NAME, pickTracks.TRACK_TITLE }, new int[] {
+						android.R.layout.simple_list_item_2,
+						new String[] { pickTracks.A_STAGE_NAME,
+								pickTracks.TRACK_TITLE }, new int[] {
 								android.R.id.text1, android.R.id.text2 });
 				tracks.setAdapter(adp);
 
@@ -181,9 +186,10 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener, OnC
 
 		return true;
 	}
+
 	@Override
 	protected void onResume() {
-		
+
 		super.onResume();
 	}
 
@@ -234,15 +240,15 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener, OnC
 				header.setText("long press to add to playlist");
 				tracks.addHeaderView(header);
 				tracks.addFooterView(header);
-				ListAdapter adp = new SimpleCursorAdapter(Searchy.this,
-						R.layout.searchrow, mCursor, new String[] {
-								pickTracks.A_STAGE_NAME, pickTracks.TRACK_TITLE,
-								pickTracks.TRACK_file }, new int[] {
-								R.id.tvs_a_id, R.id.tv_songs_name,
+				ListAdapter adp = new SimpleCursorAdapter(
+						Searchy.this,
+						R.layout.searchrow,
+						mCursor,
+						new String[] { pickTracks.A_STAGE_NAME,
+								pickTracks.TRACK_TITLE, pickTracks.TRACK_file },
+						new int[] { R.id.tvs_a_id, R.id.tv_songs_name,
 								R.id.tv_songs_link });
 				tracks.setAdapter(adp);
-				
-				
 
 			}
 
@@ -257,37 +263,37 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener, OnC
 			Log.v("SEARCHY", mCursor.getCount() + "");
 			startManagingCursor(mCursor);
 
-//			tracks.setOnItemClickListener(new OnItemClickListener() {
-//
-//				@Override
-//				public void onItemClick(AdapterView<?> arg0, View v, int pos,
-//						long arg3) {
-//
-//					RelativeLayout relly = (RelativeLayout) v;
-//					TextView tv = ((TextView) findViewById(R.id.tv_songs_link));
-//					String me = tv.getText().toString();
-//
-//					String aI = "http://109.74.201.47/content/" + me;
-//					String sName = "your favorite Song";
-//					String UR = "http://109.74.201.47/content/" + me+".mp3";
-//					Intent view = new Intent(Searchy.this, Player_View.class);
-//					view.putExtra("artistImage", aI);
-//					Intent sing = new Intent(Searchy.this, Mplayer.class);
-//					sing.putExtra("songName", sName);
-//					sing.putExtra("url", UR);
-//
-//					// startActivity(view);
-//					startService(sing);
-//
-//				}
-//			});
-			
+			// tracks.setOnItemClickListener(new OnItemClickListener() {
+			//
+			// @Override
+			// public void onItemClick(AdapterView<?> arg0, View v, int pos,
+			// long arg3) {
+			//
+			// RelativeLayout relly = (RelativeLayout) v;
+			// TextView tv = ((TextView) findViewById(R.id.tv_songs_link));
+			// String me = tv.getText().toString();
+			//
+			// String aI = "http://109.74.201.47/content/" + me;
+			// String sName = "your favorite Song";
+			// String UR = "http://109.74.201.47/content/" + me+".mp3";
+			// Intent view = new Intent(Searchy.this, Player_View.class);
+			// view.putExtra("artistImage", aI);
+			// Intent sing = new Intent(Searchy.this, Mplayer.class);
+			// sing.putExtra("songName", sName);
+			// sing.putExtra("url", UR);
+			//
+			// // startActivity(view);
+			// startService(sing);
+			//
+			// }
+			// });
+
 			tracks.setOnItemLongClickListener(new OnItemLongClickListener() {
-				
+
 				@Override
 				public boolean onItemLongClick(AdapterView<?> v, View arg1,
 						int arg2, long arg3) {
-					//RelativeLayout relly = (RelativeLayout) v;
+					// RelativeLayout relly = (RelativeLayout) v;
 					TextView tv = ((TextView) findViewById(R.id.tv_songs_link));
 					String me = tv.getText().toString();
 					pickTracks.open();
@@ -295,8 +301,11 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener, OnC
 					int tr_id = pickTracks.getTrackId(me);
 					pickTracks.AddSongToPlaylist(tr_id, pl_id, me);
 					pickTracks.close();
-					Toast.makeText(Searchy.this, me+" has been added to"+pls, Toast.LENGTH_LONG).show();
-					
+					Toast.makeText(Searchy.this,
+							me + " has been added to" + pls, Toast.LENGTH_LONG)
+							.show();
+					initpl();
+
 					return false;
 				}
 			});
@@ -306,13 +315,11 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener, OnC
 
 	@Override
 	public void onClick(View v) {
-		switch(v.getId())
-		{
+		switch (v.getId()) {
 		case R.id.Stop:
 			stopService(new Intent(Searchy.this, Mplayer.class));
 			break;
 		}
-		
-		
+
 	}
 }

@@ -274,23 +274,28 @@ public class DbHelper {
 
 		String[] trackmeta = new String[] { ITEM_ID, A_STAGE_NAME, TRACK_TITLE,
 				TRACK_file, IMAGE_file };
+	
 
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
-		for (getSearched.moveToFirst(); !getSearched.isAfterLast(); getSearched
-				.moveToNext()) {
+		//for (getSearched.moveToFirst(); !getSearched.isAfterLast(); getSearched
+		//		.moveToNext()) {
+			
+		while (getSearched.moveToNext()){
 			int t = getSearched.getInt(getSearched
 					.getColumnIndex(PLAYLIST_DATA_TRACK_ID));
 		
 			Cursor gett = bombaDatabase.query(Bomba_master_songs, trackmeta,
 					ITEM_ID + " = " + t, null, null, null,null);
 			HashMap<String, String> map = new HashMap<String, String>();
-			map.put(ITEM_ID, gett.getInt(gett.getColumnIndex(ITEM_ID))+"");
-			map.put(A_STAGE_NAME, gett.getString(gett.getColumnIndex(A_STAGE_NAME)));
-			map.put(TRACK_TITLE, gett.getString(gett.getColumnIndex(TRACK_TITLE)));
-			map.put(IMAGE_file, gett.getString(gett.getColumnIndex(IMAGE_file)));
-			list.add(map);
-			
+				
+			while (gett.moveToNext()){
+				map.put(ITEM_ID, gett.getInt(gett.getColumnIndex(ITEM_ID))+"");
+				map.put(A_STAGE_NAME, gett.getString(gett.getColumnIndex(A_STAGE_NAME)));
+				map.put(TRACK_TITLE, gett.getString(gett.getColumnIndex(TRACK_TITLE)));
+				map.put(IMAGE_file, gett.getString(gett.getColumnIndex(IMAGE_file)));
+				list.add(map);
+			}
 		}
 		return list;
 	}
