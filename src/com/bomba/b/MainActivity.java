@@ -186,7 +186,7 @@ public class MainActivity extends SlidingActivity implements TabListener,
 			try {
 				HttpClient getSongs = new DefaultHttpClient();
 				HttpGet request = new HttpGet(
-						"http://41.139.204.179/select.php");
+						"http://109.74.201.47/select.php");
 				HttpResponse resp = getSongs.execute(request);
 				String jsonPayload = EntityUtils.toString(resp.getEntity());
 				JSONObject parentObject = new JSONObject(jsonPayload);
@@ -216,7 +216,7 @@ public class MainActivity extends SlidingActivity implements TabListener,
 				Log.v("MAINACTIVITY", "songs added to the database");
 
 			} catch (Exception e) {
-				Log.v("MAINACTIVITY", e.toString());
+				Log.v("MAINACTIVITY LOAD ERROR", e.toString());
 
 			} finally {
 

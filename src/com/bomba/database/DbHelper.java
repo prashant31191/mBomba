@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.text.InputFilter.LengthFilter;
 import android.util.Log;
+import android.webkit.HttpAuthHandler;
 import android.widget.Toast;
 
 public class DbHelper {
@@ -20,7 +21,7 @@ public class DbHelper {
 
 	// name of the database
 	public static String DATABASE_NAME = "bomba_content";
-	public static int DATABASE_VERSION = 17;
+	public static int DATABASE_VERSION = 20;
 
 	// create the table names
 	public static final String PLAYLIST_TABLE = "tbl_playlist";
@@ -60,6 +61,7 @@ public class DbHelper {
 	public static final String LABEL = "label";
 	public static final String IMAGE_file = "image_label";
 	public static final String TRACK_file = "image_file";
+	public static final String DOWNLOAD_STATUS = "d_status";
 
 	// name the rows in the playlist table
 	public static final String PLAYLIST_ROW_ID = "_id";
@@ -129,7 +131,7 @@ public class DbHelper {
 					+ GENRE + " TEXT, " + CUT + " TEXT, " + PRODUCER
 					+ " TEXT, " + STUDIO + " TEXT, " + MANAGEMENT + " TEXT, "
 					+ LABEL + " TEXT, " + IMAGE_file + " TEXT, " + TRACK_file
-					+ " TEXT);");
+					+ " TEXT, " + DOWNLOAD_STATUS + " INTEGER);");
 			Log.v(TAG, "db CREATED");
 
 		}
@@ -188,6 +190,41 @@ public class DbHelper {
 		return bombaDatabase.insert(Bomba_Songs, null, songValues);
 	}
 
+	// get the track id to add the song to a playlist
+	public int getTrackId(String t_name) {
+		int t = 0;
+		String[] columns = new String[] { ITEM_ID };
+		Cursor t_id = bombaDatabase.query(Bomba_master_songs, columns,
+				TRACK_TITLE + " LIKE \"%" + t_name + "%\"", null, null, null,
+				null, null);
+		if (t_id.moveToFirst()) {
+			t = t_id.getInt(t_id.getColumnIndex(ITEM_ID));
+		}
+		return t;
+
+	}
+
+	// get the playlist id
+	public int getPlaylistId(String p_name) {
+		int p = 0;
+		String[] columns = new String[] { PLAYLIST_ROW_ID };
+		Cursor p_id = bombaDatabase.query(PLAYLIST_TABLE, columns,
+				PLAYLIST_NAME + " LIKE \"%" + p_name + "%\"", null, null, null,
+				null, null);
+		if (p_id.moveToFirst()) {
+			p = p_id.getInt(p_id.getColumnIndex(PLAYLIST_ROW_ID));
+		}
+		return p;
+	}
+
+	public long AddSongToPlaylist(int T_id, int p_id, String t_name) {
+		ContentValues playlistData = new ContentValues();
+		playlistData.put(PLAYLIST_DATA_TRACK_ID, T_id);
+		playlistData.put(PLAYLIST_DATA_PLAYLIST_ID, p_id);
+		playlistData.put(PLAYLIST_DATA_TRACK_NAME, t_name);
+		return bombaDatabase.insert(PLAYLIST_DATA, null, playlistData);
+	}
+
 	public long AddSongsToLocalMaster(int id, String track_title,
 			String a_legal, String s_name, String featured, String a_title,
 			String t_number, String genre, String cut, String producer,
@@ -208,21 +245,54 @@ public class DbHelper {
 		masterSong.put(LABEL, label);
 		masterSong.put(IMAGE_file, i_file);
 		masterSong.put(TRACK_file, t_file);
+		masterSong.put(DOWNLOAD_STATUS, 0);
+		Log.v("INITIALADD", "added song!!!");
 		return bombaDatabase.insert(Bomba_master_songs, null, masterSong);
 	}
 
 	public Cursor getSearched(String s_name) {
-		String[] columns = new String[] {ITEM_ID, A_STAGE_NAME, TRACK_TITLE,
+		String[] columns = new String[] { ITEM_ID, A_STAGE_NAME, TRACK_TITLE,
 				TRACK_file, IMAGE_file };
-//		Cursor getSearched = bombaDatabase.query(Bomba_master_songs, columns,
-//				TRACK_TITLE + " LIKE \"%" + s_name + "%\"", null, null, null,
-//				null, null);
-		 Cursor getSearched = bombaDatabase
-		 .rawQuery(
-				 "select * from tbl_master where track_title LIKE '%"+s_name+"%' or a_stage_name LIKE '%"+s_name+"'", null);
-//		 "select * from tbl_master", null);
-		 Log.v("DATABASE", "the search has been done: " + getSearched.getCount());
+		// Cursor getSearched = bombaDatabase.query(Bomba_master_songs, columns,
+		// TRACK_TITLE + " LIKE \"%" + s_name + "%\"", null, null, null,
+		// null, null);
+		Cursor getSearched = bombaDatabase.rawQuery(
+				"select * from tbl_master where track_title LIKE '%" + s_name
+						+ "%' or a_stage_name LIKE '%" + s_name + "'", null);
+		// "select * from tbl_master", null);
+		Log.v("DATABASE", "the search has been done: " + getSearched.getCount());
 		return getSearched;
+	}
+
+	public ArrayList<HashMap<String, String>> getTracksInList(String p_name) {
+		String[] columns = new String[] { PLAYLIST_DATA_TRACK_ID };
+		Cursor getSearched = bombaDatabase.query(PLAYLIST_DATA, columns, null,
+				null, null, null, null);
+
+		Log.v("DATABASE",
+				"the tracks have been picked " + getSearched.getCount());
+
+		String[] trackmeta = new String[] { ITEM_ID, A_STAGE_NAME, TRACK_TITLE,
+				TRACK_file, IMAGE_file };
+
+		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+
+		for (getSearched.moveToFirst(); !getSearched.isAfterLast(); getSearched
+				.moveToNext()) {
+			int t = getSearched.getInt(getSearched
+					.getColumnIndex(PLAYLIST_DATA_TRACK_ID));
+		
+			Cursor gett = bombaDatabase.query(Bomba_master_songs, trackmeta,
+					ITEM_ID + " = " + t, null, null, null,null);
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put(ITEM_ID, gett.getInt(gett.getColumnIndex(ITEM_ID))+"");
+			map.put(A_STAGE_NAME, gett.getString(gett.getColumnIndex(A_STAGE_NAME)));
+			map.put(TRACK_TITLE, gett.getString(gett.getColumnIndex(TRACK_TITLE)));
+			map.put(IMAGE_file, gett.getString(gett.getColumnIndex(IMAGE_file)));
+			list.add(map);
+			
+		}
+		return list;
 	}
 
 	// get all the playlists
@@ -250,10 +320,9 @@ public class DbHelper {
 	// check if the playlist exists in tracks table
 	// use a boolean value if there are
 	public boolean DoesPlaylistExist(String p_name) {
-		String[] listC = new String[] { PLAYLIST_DATA_PLAYLIST_ID,
-				PLAYLIST_DATA_TRACK_ID, PLAYLIST_DATA_TRACK_NAME };
-		Cursor p_table_c = bombaDatabase.query(PLAYLIST_DATA, listC,
-				PLAYLIST_DATA_TRACK_NAME + "=\"" + p_name + "\"", null, null,
+		String[] listC = new String[] { PLAYLIST_NAME, PLAYLIST_ROW_ID };
+		Cursor p_table_c = bombaDatabase.query(PLAYLIST_TABLE, listC,
+				PLAYLIST_NAME + "=\"" + p_name + "\"", null, null,
 				null, null);
 		Log.v(TAG, "getting if the playlist exists");
 		if (p_table_c.moveToFirst()) {
