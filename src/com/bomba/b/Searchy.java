@@ -137,10 +137,11 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 			if (what != null) {
 				Log.v("SEARCHYLOADER", what.size() + "");
 				SimpleAdapter adp = new SimpleAdapter(Searchy.this, what,
-						android.R.layout.simple_list_item_2,
+						R.layout.searchrow,
 						new String[] { pickTracks.A_STAGE_NAME,
-								pickTracks.TRACK_TITLE }, new int[] {
-								android.R.id.text1, android.R.id.text2 });
+								pickTracks.TRACK_TITLE, pickTracks.TRACK_file },
+						new int[] { R.id.tvs_a_id, R.id.tv_songs_name,
+								R.id.tv_songs_link });
 				tracks.setAdapter(adp);
 
 			} else {
@@ -300,7 +301,7 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 					pickTracks.open();
 					int pl_id = pickTracks.getPlaylistId(pls);
 					int tr_id = pickTracks.getTrackId(me);
-					pickTracks.AddSongToPlaylist(tr_id, pl_id, pls);
+					pickTracks.AddSongToPlaylist(tr_id, pl_id, me);
 					pickTracks.close();
 					Toast.makeText(Searchy.this,
 							me + " has been added to" + pls, Toast.LENGTH_LONG)
