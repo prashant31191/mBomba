@@ -26,6 +26,7 @@ import com.easy.facebook.android.facebook.LoginListener;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.SlidingActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
@@ -51,6 +52,7 @@ public class MainActivity extends SlidingActivity implements TabListener,
 	public final String fbAppID = "280604498727857";
 	private FBLoginManager fbl;
 	SharedPreferences prefs;
+	ProgressDialog pd;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +68,6 @@ public class MainActivity extends SlidingActivity implements TabListener,
 		sm.setFadeDegree(0.35f);
 		sm.setMenu(R.layout.slide);
 		prefs = getApplicationContext().getSharedPreferences("meprefs", 0);
-		
 
 		ListView lv = (ListView) findViewById(R.id.slideList);
 		lv.setOnItemClickListener(new OnItemClickListener() {
@@ -124,7 +125,7 @@ public class MainActivity extends SlidingActivity implements TabListener,
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		fbl.loginSuccess(data);
-	
+
 	}
 
 	@Override
@@ -135,7 +136,7 @@ public class MainActivity extends SlidingActivity implements TabListener,
 	}
 
 	private void init() {
-		
+
 		startService(new Intent(MainActivity.this, bombaDownloader.class));
 		ListView playlists = (ListView) findViewById(R.id.listPlayLists);
 
@@ -148,6 +149,9 @@ public class MainActivity extends SlidingActivity implements TabListener,
 		if (pickLists.getPlayLists().length == 0) {
 			Toast.makeText(MainActivity.this, "Create a playlist to continue",
 					Toast.LENGTH_LONG).show();
+			pd = ProgressDialog.show(MainActivity.this,
+					"Synchronizing the database",
+					"The world of music is coming right to you");
 			populatesongsFromOnline poppy = new populatesongsFromOnline();
 			poppy.execute();
 
@@ -182,11 +186,16 @@ public class MainActivity extends SlidingActivity implements TabListener,
 
 	public class populatesongsFromOnline extends AsyncTask<Void, Void, Void> {
 		@Override
+		protected void onPostExecute(Void result) {
+			pd.dismiss();
+			super.onPostExecute(result);
+		}
+		
+		@Override
 		protected Void doInBackground(Void... arg0) {
 			try {
 				HttpClient getSongs = new DefaultHttpClient();
-				HttpGet request = new HttpGet(
-						"http://109.74.201.47/select.php");
+				HttpGet request = new HttpGet("http://109.74.201.47/select.php");
 				HttpResponse resp = getSongs.execute(request);
 				String jsonPayload = EntityUtils.toString(resp.getEntity());
 				JSONObject parentObject = new JSONObject(jsonPayload);
@@ -299,7 +308,7 @@ public class MainActivity extends SlidingActivity implements TabListener,
 				GraphApi graphApi = new GraphApi(fb);
 				user = graphApi.getMyAccountInfo();
 				// update your status if logged in
-				//graphApi.setStatus("Has logged into Bomba on Facebook");
+				// graphApi.setStatus("Has logged into Bomba on Facebook");
 				Log.v("FACEBOOK", user.toString());
 			} catch (EasyFacebookError e) {
 				Log.d("TAG: ", e.toString());
@@ -319,9 +328,10 @@ public class MainActivity extends SlidingActivity implements TabListener,
 
 		fbl.displayToast("Thank  you for logging into Bomba");
 	}
+
 	@Override
 	protected void onResume() {
-		
+
 		super.onResume();
 	}
 

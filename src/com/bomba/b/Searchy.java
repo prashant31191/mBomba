@@ -300,7 +300,7 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 					pickTracks.open();
 					int pl_id = pickTracks.getPlaylistId(pls);
 					int tr_id = pickTracks.getTrackId(me);
-					pickTracks.AddSongToPlaylist(tr_id, pl_id, me);
+					pickTracks.AddSongToPlaylist(tr_id, pl_id, pls);
 					pickTracks.close();
 					Toast.makeText(Searchy.this,
 							me + " has been added to" + pls, Toast.LENGTH_LONG)

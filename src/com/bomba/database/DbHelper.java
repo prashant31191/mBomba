@@ -21,7 +21,7 @@ public class DbHelper {
 
 	// name of the database
 	public static String DATABASE_NAME = "bomba_content";
-	public static int DATABASE_VERSION = 20;
+	public static int DATABASE_VERSION = 22;
 
 	// create the table names
 	public static final String PLAYLIST_TABLE = "tbl_playlist";
