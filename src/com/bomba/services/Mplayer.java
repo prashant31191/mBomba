@@ -92,7 +92,7 @@ public class Mplayer extends Service implements OnAudioFocusChangeListener {
 		protected Void doInBackground(Void... params) {
 
 			try {
-
+				Log.d("bdsrc", urls[0]);
 				mp.setDataSource(urls[0]);
 				Log.v("service", "datasourse set");
 				mp.prepareAsync();

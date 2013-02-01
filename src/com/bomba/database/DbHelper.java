@@ -293,7 +293,7 @@ public class DbHelper {
 				map.put(ITEM_ID, gett.getInt(gett.getColumnIndex(ITEM_ID))+"");
 				map.put(A_STAGE_NAME, gett.getString(gett.getColumnIndex(A_STAGE_NAME)));
 				map.put(TRACK_TITLE, gett.getString(gett.getColumnIndex(TRACK_TITLE)));
-				map.put(IMAGE_file, gett.getString(gett.getColumnIndex(IMAGE_file)));
+				map.put(TRACK_file, gett.getString(gett.getColumnIndex(TRACK_file)));
 				list.add(map);
 			}
 		}
