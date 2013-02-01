@@ -53,6 +53,7 @@ public class MainActivity extends SlidingActivity implements TabListener,
 	private FBLoginManager fbl;
 	SharedPreferences prefs;
 	ProgressDialog pd;
+	String name = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -307,6 +308,7 @@ public class MainActivity extends SlidingActivity implements TabListener,
 			try {
 				GraphApi graphApi = new GraphApi(fb);
 				user = graphApi.getMyAccountInfo();
+				name = user.getName();
 				// update your status if logged in
 				// graphApi.setStatus("Has logged into Bomba on Facebook");
 				Log.v("FACEBOOK", user.toString());
@@ -324,9 +326,9 @@ public class MainActivity extends SlidingActivity implements TabListener,
 		FbThread fbThread = new FbThread(facebook);
 		User user = fbThread.getUser();
 
-		fbThread.start();
-
-		fbl.displayToast("Thank  you for logging into Bomba");
+			fbl.displayToast("Thank  you for logging into Bomba");
+		
+		
 	}
 
 	@Override
