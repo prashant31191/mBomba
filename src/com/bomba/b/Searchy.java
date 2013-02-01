@@ -238,8 +238,9 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 			} else {
 				TextView header = new TextView(Searchy.this);
 				header.setText("long press to add to playlist");
-				tracks.addHeaderView(header);
-				tracks.addFooterView(header);
+				tracks.invalidate();
+				//tracks.addHeaderView(header);
+				//tracks.addFooterView(header);
 				ListAdapter adp = new SimpleCursorAdapter(
 						Searchy.this,
 						R.layout.searchrow,
