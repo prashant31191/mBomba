@@ -264,30 +264,30 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 			Log.v("SEARCHY", mCursor.getCount() + "");
 			startManagingCursor(mCursor);
 
-			// tracks.setOnItemClickListener(new OnItemClickListener() {
-			//
-			// @Override
-			// public void onItemClick(AdapterView<?> arg0, View v, int pos,
-			// long arg3) {
-			//
-			// RelativeLayout relly = (RelativeLayout) v;
-			// TextView tv = ((TextView) findViewById(R.id.tv_songs_link));
-			// String me = tv.getText().toString();
-			//
-			// String aI = "http://109.74.201.47/content/" + me;
-			// String sName = "your favorite Song";
-			// String UR = "http://109.74.201.47/content/" + me+".mp3";
-			// Intent view = new Intent(Searchy.this, Player_View.class);
-			// view.putExtra("artistImage", aI);
-			// Intent sing = new Intent(Searchy.this, Mplayer.class);
-			// sing.putExtra("songName", sName);
-			// sing.putExtra("url", UR);
-			//
-			// // startActivity(view);
-			// startService(sing);
-			//
-			// }
-			// });
+			 tracks.setOnItemClickListener(new OnItemClickListener() {
+			
+			 @Override
+			 public void onItemClick(AdapterView<?> arg0, View v, int pos,
+			 long arg3) {
+			
+			 RelativeLayout relly = (RelativeLayout) v;
+			 TextView tv = ((TextView) findViewById(R.id.tv_songs_link));
+			 String me = tv.getText().toString();
+			
+			 String aI = "http://109.74.201.47/content/" + me;
+			 String sName = "your favorite Song";
+			 String UR = "http://109.74.201.47/content/" + me+".mp3";
+			 Intent view = new Intent(Searchy.this, Player_View.class);
+			 view.putExtra("artistImage", aI);
+			 Intent sing = new Intent(Searchy.this, Mplayer.class);
+			 sing.putExtra("songName", sName);
+			 sing.putExtra("url", UR);
+			
+			 // startActivity(view);
+			 startService(sing);
+			
+			 }
+			 });
 
 			tracks.setOnItemLongClickListener(new OnItemLongClickListener() {
 
