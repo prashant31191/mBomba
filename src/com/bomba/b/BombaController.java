@@ -1,43 +1,28 @@
-package com.bomba.services;
+package com.bomba.b;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
-import android.app.Service;
-import android.content.Intent;
+import android.app.Application;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-public class bombaDownloader extends Service {
+public class BombaController extends Application {
 	
 	File bombaDir;
 	boolean Downloading;
-
-	@Override
-	public IBinder onBind(Intent intent) {
-
-		return null;
-	}
-
+	
 	@Override
 	public void onCreate() {
+		
+Downloading = false;
 
-		super.onCreate();
-	}
-
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		Downloading = false;
-
-		Toast.makeText(getApplicationContext(), "checking external Storage",
-				Toast.LENGTH_LONG).show();
+		
 		boolean mExternalStorageAvailable = false;
 		boolean mExternalStorageWriteable = false;
 		String state = Environment.getExternalStorageState();
@@ -50,9 +35,7 @@ public class bombaDownloader extends Service {
 			bombaDir = new File(root+"/bomba/content/.music");
 			if(bombaDir.exists())
 			{
-				Toast.makeText(getApplicationContext(),
-						"folders existent", Toast.LENGTH_LONG)
-						.show();
+				
 			}else
 			{
 			bombaDir.mkdirs();
@@ -82,8 +65,8 @@ public class bombaDownloader extends Service {
 
 			mExternalStorageAvailable = mExternalStorageWriteable = false;
 		}
-
-		return super.onStartCommand(intent, flags, startId);
+		
+		super.onCreate();
 	}
 	
 	public class contentGetter extends AsyncTask<String, Void, Void>
@@ -122,5 +105,9 @@ public class bombaDownloader extends Service {
 		}
 		
 	}
+	
+	
+	
+	
 
 }

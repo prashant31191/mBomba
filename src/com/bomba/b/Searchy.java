@@ -36,6 +36,7 @@ import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.bomba.R;
 import com.bomba.database.DbHelper;
 import com.bomba.services.Mplayer;
+import com.bomba.services.bombaDownloader;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.SlidingActivity;
 
@@ -329,6 +330,7 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 					int tr_id = pickTracks.getTrackId(me);
 					pickTracks.AddSongToPlaylist(tr_id, pl_id, me);
 					pickTracks.close();
+				
 					Toast.makeText(Searchy.this,
 							me + " has been added to" + pls, Toast.LENGTH_LONG)
 							.show();

@@ -326,7 +326,8 @@ public class MainActivity extends SlidingActivity implements TabListener,
 		FbThread fbThread = new FbThread(facebook);
 		User user = fbThread.getUser();
 
-			fbl.displayToast("Thank  you for logging into Bomba");
+			fbl.displayToast("Thank  you" +
+					" for logging into Bomba");
 		
 		
 	}
