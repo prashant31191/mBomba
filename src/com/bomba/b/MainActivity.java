@@ -16,7 +16,6 @@ import com.actionbarsherlock.view.MenuItem;
 
 import com.bomba.R;
 import com.bomba.database.DbHelper;
-import com.bomba.services.bombaDownloader;
 import com.easy.facebook.android.apicall.GraphApi;
 import com.easy.facebook.android.data.User;
 import com.easy.facebook.android.error.EasyFacebookError;
@@ -138,7 +137,7 @@ public class MainActivity extends SlidingActivity implements TabListener,
 
 	private void init() {
 
-		startService(new Intent(MainActivity.this, bombaDownloader.class));
+		//startService(new Intent(MainActivity.this, bombaDownloader.class));
 		ListView playlists = (ListView) findViewById(R.id.listPlayLists);
 
 		pickLists = new DbHelper(MainActivity.this);

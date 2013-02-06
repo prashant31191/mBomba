@@ -1,5 +1,10 @@
 package com.bomba.b;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -36,7 +41,6 @@ import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.bomba.R;
 import com.bomba.database.DbHelper;
 import com.bomba.services.Mplayer;
-import com.bomba.services.bombaDownloader;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.SlidingActivity;
 
@@ -47,12 +51,13 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 	Bundle m;
 	DbHelper pickTracks;
 	Button bPrev, bStop, bNext;
-
+	ApplicationController BC;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		pls = getIntent().getExtras().getString("p");
 		getSupportActionBar().setTitle(pls);
+		BC = (ApplicationController)getApplicationContext();
 
 		setContentView(R.layout.s_view);
 		setBehindContentView(R.layout.slide);
@@ -334,13 +339,53 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 					Toast.makeText(Searchy.this,
 							me + " has been added to" + pls, Toast.LENGTH_LONG)
 							.show();
+					
 					initpl();
-
+					contentGetter cG = new contentGetter();
+					cG.execute("http://109.74.201.47/content/" + me+".mp3");
+					
 					return false;
 				}
 			});
 			return null;
 		}
+	}
+	
+	public class contentGetter extends AsyncTask<String, Void, Void>
+	{
+
+		@Override
+		protected Void doInBackground(String... params) {
+			
+			try {
+				URL linkToSong = new URL(params[0]);
+				HttpURLConnection songConnection = (HttpURLConnection) linkToSong.openConnection();
+				songConnection.setRequestMethod("GET");
+				songConnection.setDoOutput(true);
+				songConnection.connect();
+				File song = new File(BC.bombaDir, params[0]);
+				FileOutputStream fos = new FileOutputStream(song);
+				InputStream miInputStream = songConnection.getInputStream();
+				int fileSize = songConnection.getContentLength();
+				int downloadedSize = 0;
+				byte[] buffer = new byte[1024];
+				int bufferLength = 0;
+				while((bufferLength = miInputStream.read(buffer))>0)
+				{
+					BC.Downloading = true;
+						fos.write(buffer,0,bufferLength);
+						downloadedSize += bufferLength;
+				}
+				BC.Downloading = false;
+				fos.close();
+			} catch (Exception e) {
+				Log.v("bombaDownloader", e.toString());
+				e.printStackTrace();
+			}
+			
+			return null;
+		}
+		
 	}
 
 	@Override
