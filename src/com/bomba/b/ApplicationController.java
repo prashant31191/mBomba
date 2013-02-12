@@ -32,12 +32,25 @@ public class ApplicationController extends Application {
 			String root = Environment.getExternalStorageDirectory().toString();
 			bombaDir = new File(root + "/bomba/content/.music");
 			if (bombaDir.exists()) {
+				Log.d("DIRECTORY", "Directory exists");
 
 			} else {
 				bombaDir.mkdirs();
-				Toast.makeText(getApplicationContext(), bombaDir.getPath(),
-						Toast.LENGTH_LONG).show();
+				Log.d("DIRECTORY", "Creating the Directory");
+				
 				File nMedia = new File(bombaDir, ".nomedia");
+				if(!nMedia.exists())
+				{
+				try
+				{
+				nMedia.createNewFile();
+				}
+				catch(Exception e)
+				{
+					Log.d("DIRECTORY", e.toString());
+				}
+				}
+				
 
 			}
 

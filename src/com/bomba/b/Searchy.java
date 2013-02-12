@@ -342,7 +342,7 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 					
 					initpl();
 					contentGetter cG = new contentGetter();
-					cG.execute("http://109.74.201.47/content/" + me+".mp3");
+					cG.execute(me+".mp3");
 					
 					return false;
 				}
@@ -358,11 +358,13 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 		protected Void doInBackground(String... params) {
 			
 			try {
-				URL linkToSong = new URL(params[0]);
+				URL linkToSong = new URL("http://109.74.201.47/content/"+params[0]);
+				Log.d("GETTERURL", linkToSong.toString());
 				HttpURLConnection songConnection = (HttpURLConnection) linkToSong.openConnection();
 				songConnection.setRequestMethod("GET");
 				songConnection.setDoOutput(true);
 				songConnection.connect();
+				
 				File song = new File(BC.bombaDir, params[0]);
 				FileOutputStream fos = new FileOutputStream(song);
 				InputStream miInputStream = songConnection.getInputStream();
@@ -372,14 +374,16 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 				int bufferLength = 0;
 				while((bufferLength = miInputStream.read(buffer))>0)
 				{
+					Log.d("DOWNLOADER", "the download has begun");
 					BC.Downloading = true;
 						fos.write(buffer,0,bufferLength);
 						downloadedSize += bufferLength;
 				}
+				Log.d("DOWNLOADER", downloadedSize+"");
 				BC.Downloading = false;
 				fos.close();
 			} catch (Exception e) {
-				Log.v("bombaDownloader", e.toString());
+				Log.d("bombaDownloader", e.toString());
 				e.printStackTrace();
 			}
 			
