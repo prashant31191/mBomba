@@ -113,9 +113,9 @@ public class MainActivity extends SlidingActivity implements TabListener,
 		fbl = new FBLoginManager(this, R.layout.activity_main, fbAppID,
 				permissions);
 		if (fbl.existsSavedFacebook()) {
-			fbl.loadFacebook();
+			//fbl.loadFacebook();
 		} else {
-			fbl.login();
+			//fbl.login();
 		}
 
 		init();
@@ -152,6 +152,7 @@ public class MainActivity extends SlidingActivity implements TabListener,
 			pd = ProgressDialog.show(MainActivity.this,
 					"Synchronizing the database",
 					"The world of music is coming right to you");
+			pd.setCancelable(false);
 			populatesongsFromOnline poppy = new populatesongsFromOnline();
 			poppy.execute();
 
@@ -225,7 +226,7 @@ public class MainActivity extends SlidingActivity implements TabListener,
 				Log.v("MAINACTIVITY", "songs added to the database");
 
 			} catch (Exception e) {
-				Log.v("MAINACTIVITY LOAD ERROR", e.toString());
+				Log.v("MAINACTIVITY LOAD ERROR", e.getMessage() + e.getCause().toString());
 
 			} finally {
 

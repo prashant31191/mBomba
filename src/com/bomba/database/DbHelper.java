@@ -21,7 +21,7 @@ public class DbHelper {
 
 	// name of the database
 	public static String DATABASE_NAME = "bomba_content";
-	public static int DATABASE_VERSION = 24;
+	public static int DATABASE_VERSION = 29;
 
 	// create the table names
 	public static final String PLAYLIST_TABLE = "tbl_playlist";
@@ -100,9 +100,9 @@ public class DbHelper {
 		public void onCreate(SQLiteDatabase database) {
 
 			database.execSQL("CREATE TABLE " + PLAYLIST_DATA + " ("
-					+ PLAYLIST_DATA_TRACK_ID + " TEXT NOT NULL, "
+					+ PLAYLIST_DATA_TRACK_ID + " TEXT NOT NULL UNIQUE, "
 					+ PLAYLIST_DATA_PLAYLIST_ID + " TEXT NOT NULL,"
-					+ PLAYLIST_DATA_TRACK_NAME + " TEXT NOT NULL UNIQUE);");
+					+ PLAYLIST_DATA_TRACK_NAME + " TEXT NOT NULL);");
 			database.execSQL("CREATE TABLE " + PLAYLIST_TABLE + " ("
 					+ PLAYLIST_ROW_ID
 					+ " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
@@ -217,7 +217,7 @@ public class DbHelper {
 		return p;
 	}
 
-	public long AddSongToPlaylist(int T_id, int p_id, String t_name) {
+	public long AddSongToPlaylist(int T_id, int p_id, String t_name) throws  SQLException {
 		ContentValues playlistData = new ContentValues();
 		playlistData.put(PLAYLIST_DATA_TRACK_ID, T_id);
 		playlistData.put(PLAYLIST_DATA_PLAYLIST_ID, p_id);
@@ -265,35 +265,42 @@ public class DbHelper {
 	}
 
 	public ArrayList<HashMap<String, String>> getTracksInList(String p_name) {
-		String[] columns = new String[] { PLAYLIST_DATA_TRACK_ID };
-		Cursor getSearched = bombaDatabase.query(PLAYLIST_DATA, columns, null,
-				null, null, null, null);
+		String[] columns = new String[] { PLAYLIST_DATA_TRACK_ID,PLAYLIST_DATA_TRACK_NAME };
+		 Cursor getSearched = bombaDatabase.query(PLAYLIST_DATA, columns,
+		 PLAYLIST_DATA_TRACK_NAME +" = "+"\'"+ p_name+"\'",
+		 null, null, null, null);
+//		Cursor getSearched = bombaDatabase.rawQuery(
+//				"select * from tbl_playlist_data where playlist_name = '%"
+//						+ p_name + "%'", null);
 
 		Log.v("DATABASE",
 				"the tracks have been picked " + getSearched.getCount());
 
 		String[] trackmeta = new String[] { ITEM_ID, A_STAGE_NAME, TRACK_TITLE,
 				TRACK_file, IMAGE_file };
-	
 
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
-		//for (getSearched.moveToFirst(); !getSearched.isAfterLast(); getSearched
-		//		.moveToNext()) {
-			
-		while (getSearched.moveToNext()){
+		// for (getSearched.moveToFirst(); !getSearched.isAfterLast();
+		// getSearched
+		// .moveToNext()) {
+
+		while (getSearched.moveToNext()) {
 			int t = getSearched.getInt(getSearched
 					.getColumnIndex(PLAYLIST_DATA_TRACK_ID));
-		
+
 			Cursor gett = bombaDatabase.query(Bomba_master_songs, trackmeta,
-					ITEM_ID + " = " + t, null, null, null,null);
+					ITEM_ID + " = " + t, null, null, null, null);
 			HashMap<String, String> map = new HashMap<String, String>();
-				
-			while (gett.moveToNext()){
-				map.put(ITEM_ID, gett.getInt(gett.getColumnIndex(ITEM_ID))+"");
-				map.put(A_STAGE_NAME, gett.getString(gett.getColumnIndex(A_STAGE_NAME)));
-				map.put(TRACK_TITLE, gett.getString(gett.getColumnIndex(TRACK_TITLE)));
-				map.put(TRACK_file, gett.getString(gett.getColumnIndex(TRACK_file)));
+
+			while (gett.moveToNext()) {
+				map.put(ITEM_ID, gett.getInt(gett.getColumnIndex(ITEM_ID)) + "");
+				map.put(A_STAGE_NAME,
+						gett.getString(gett.getColumnIndex(A_STAGE_NAME)));
+				map.put(TRACK_TITLE,
+						gett.getString(gett.getColumnIndex(TRACK_TITLE)));
+				map.put(TRACK_file,
+						gett.getString(gett.getColumnIndex(TRACK_file)));
 				list.add(map);
 			}
 		}
@@ -327,8 +334,7 @@ public class DbHelper {
 	public boolean DoesPlaylistExist(String p_name) {
 		String[] listC = new String[] { PLAYLIST_NAME, PLAYLIST_ROW_ID };
 		Cursor p_table_c = bombaDatabase.query(PLAYLIST_TABLE, listC,
-				PLAYLIST_NAME + "=\"" + p_name + "\"", null, null,
-				null, null);
+				PLAYLIST_NAME + "=\"" + p_name + "\"", null, null, null, null);
 		Log.v(TAG, "getting if the playlist exists");
 		if (p_table_c.moveToFirst()) {
 			Log.v(TAG, "true");

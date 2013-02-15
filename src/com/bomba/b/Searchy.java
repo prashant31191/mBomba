@@ -112,7 +112,7 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 		tracks.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> vi, View v, int arg2,
+			public void onItemClick(AdapterView<?> vi, View v, int pos,
 					long arg3) {
 				RelativeLayout relly = (RelativeLayout) v;
 				 TextView tv = ((TextView) findViewById(R.id.tv_songs_link));
@@ -120,7 +120,8 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 				
 				 String aI = "http://109.74.201.47/content/" + me;
 				 String sName = me;
-				 String UR = "http://109.74.201.47/content/" + me+".mp3";
+				 Log.v("SONG NAME", pos+ " "+	me);
+				 String UR = "/mnt/sdcard/bomba/content/.music/" + me+".mp3";
 				 Intent view = new Intent(Searchy.this, Player_View.class);
 				 view.putExtra("artistImage", aI);
 				 Intent sing = new Intent(Searchy.this, Mplayer.class);
@@ -156,6 +157,7 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 			pickTracks = new DbHelper(Searchy.this);
 			pickTracks.open();
 			what = pickTracks.getTracksInList(st[0]);
+			Log.d("PNAME", st[0]);
 			pickTracks.close();
 
 			return null;
@@ -333,8 +335,15 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 					pickTracks.open();
 					int pl_id = pickTracks.getPlaylistId(pls);
 					int tr_id = pickTracks.getTrackId(me);
-					pickTracks.AddSongToPlaylist(tr_id, pl_id, me);
+					try
+					{
+					pickTracks.AddSongToPlaylist(tr_id, pl_id, pls);
 					pickTracks.close();
+					}
+					catch(Exception e)
+					{
+						Log.d("SQLEXCEPTION", e.toString()+" "+e.getCause().toString());
+					}
 				
 					Toast.makeText(Searchy.this,
 							me + " has been added to" + pls, Toast.LENGTH_LONG)

@@ -1,10 +1,14 @@
 package com.bomba.b;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.channels.FileChannel;
+
+import com.bomba.database.DbHelper;
 
 import android.app.Application;
 import android.os.AsyncTask;
@@ -33,6 +37,8 @@ public class ApplicationController extends Application {
 			bombaDir = new File(root + "/bomba/content/.music");
 			if (bombaDir.exists()) {
 				Log.d("DIRECTORY", "Directory exists");
+				Log.d("DIRECTORY", bombaDir.toString());
+			
 
 			} else {
 				bombaDir.mkdirs();

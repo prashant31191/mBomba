@@ -2,7 +2,6 @@ package com.bomba.services;
 
 import com.bomba.b.NowPlaying;
 
-
 import android.R;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -11,7 +10,9 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
 import android.os.AsyncTask;
@@ -79,7 +80,7 @@ public class Mplayer extends Service implements OnAudioFocusChangeListener {
 			super.onPreExecute();
 
 			Log.v("service", "starting jobo");
-			mp.setAudioStreamType(3);
+			mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mp.setWakeMode(getApplicationContext(),
 					PowerManager.PARTIAL_WAKE_LOCK);
 			wLock = ((WifiManager) getSystemService(getApplicationContext().WIFI_SERVICE))
@@ -93,8 +94,11 @@ public class Mplayer extends Service implements OnAudioFocusChangeListener {
 
 			try {
 				Log.d("bdsrc", urls[0]);
-				mp.setDataSource(urls[0]);
+				Uri local = Uri.parse(urls[0]);
+
+				mp.setDataSource(getApplicationContext(), local);
 				Log.v("service", "datasourse set");
+				// mp.prepareAsync();
 				mp.prepareAsync();
 
 				Log.v("service", "prepared");
@@ -113,25 +117,36 @@ public class Mplayer extends Service implements OnAudioFocusChangeListener {
 					Log.v("service", "going in ");
 					player.getDuration();
 					if (audioChecker()) {
-						Intent act = new Intent(getApplicationContext(), NowPlaying.class);
-						act.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+						Intent act = new Intent(getApplicationContext(),
+								NowPlaying.class);
+						act.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+								| Intent.FLAG_ACTIVITY_SINGLE_TOP);
 						player.start();
 						PendingIntent pi = PendingIntent.getActivity(
-								getApplicationContext(), 0,
-								act,
+								getApplicationContext(), 0, act,
 								PendingIntent.FLAG_UPDATE_CURRENT);
 						Notification notification = new Notification();
 						notification.tickerText = url + " is playing";
 						notification.icon = R.drawable.ic_btn_speak_now;
 						notification.flags |= Notification.FLAG_ONGOING_EVENT;
 						notification.setLatestEventInfo(
-								getApplicationContext(), "MusicPlayerSample",
-								"Playing: " + url, pi);
+								getApplicationContext(), "Bomba", "Playing: "
+										+ url, pi);
 						startForeground(NOTIFICATION_ID, notification);
 					} else {
 						Log.v("service",
 								"playing isnt possible audio is playing");
 					}
+
+				}
+			});
+			mp.setOnCompletionListener(new OnCompletionListener() {
+
+				@Override
+				public void onCompletion(MediaPlayer arg0) {
+					Toast.makeText(getApplicationContext(),
+							"yo bro the song is over ", Toast.LENGTH_LONG)
+							.show();
 
 				}
 			});
