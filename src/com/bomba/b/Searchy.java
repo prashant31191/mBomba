@@ -7,12 +7,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 
 import android.util.Log;
 import android.view.View;
@@ -26,6 +29,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
@@ -52,6 +56,19 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 	DbHelper pickTracks;
 	Button bPrev, bStop, bNext;
 	ApplicationController BC;
+	int imageIDs[]  = {
+			R.drawable.background_avril,
+			R.drawable.background_daddy_owen,
+			R.drawable.background_eko_dydda,
+			R.drawable.background_it,
+			R.drawable.background_joh_makini,
+			R.drawable.background_kambua,
+			R.drawable.background_kimya,
+			R.drawable.background_octopizzo,
+			R.drawable.background_mercy_masika
+	};
+	Random rand;
+	LinearLayout mainl;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -97,8 +114,36 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 		});
 
 	}
+	private Handler uiCallback = new Handler () {
+	    public void handleMessage (Message msg) {
+	        // do stuff with UI
+	    	 
+	    	int im = rand.nextInt(8);
+	    	
+	    	if (mainl != null)
+	    		mainl.setBackgroundResource(imageIDs[im]);
+	    }
+	};
 
 	private void init() {
+		
+		mainl = (LinearLayout) findViewById(R.id.sview);
+		Thread timer = new Thread() {
+		    public void run () {
+		        for (;;) {
+		            // do stuff in a separate thread
+		            uiCallback.sendEmptyMessage(0);
+		            try {
+						Thread.sleep(3000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}    // sleep for 3 seconds
+		        }
+		    }
+		};
+		
+		timer.start();
 		bPrev = (Button) findViewById(R.id.Previous);
 		bStop = (Button) findViewById(R.id.Stop);
 		bNext = (Button) findViewById(R.id.Next);
