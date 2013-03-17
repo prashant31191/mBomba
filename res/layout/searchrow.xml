@@ -4,6 +4,16 @@
     android:paddingLeft="5dp"
     android:layout_height="match_parent" >
 
+    
+    <TextView
+        android:id="@+id/tv_songs_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvs_a_id"
+         android:textSize="16dp"
+         />
+    
     <TextView
         android:id="@+id/tvs_a_id"
         android:layout_width="wrap_content"
@@ -13,14 +23,7 @@
         android:textSize="16dp"
          />
 
-    <TextView
-        android:id="@+id/tv_songs_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tvs_a_id"
-         android:textSize="16dp"
-         />
+    
 
     <TextView
         android:id="@+id/tv_songs_link"
@@ -29,6 +32,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tv_songs_name"
         android:visibility="invisible"
+        android:tag="thelink"
          android:textSize="16dp"
          />
 

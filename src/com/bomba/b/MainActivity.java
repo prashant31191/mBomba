@@ -1,5 +1,7 @@
 package com.bomba.b;
 
+import java.util.Random;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -31,6 +33,8 @@ import android.content.SharedPreferences;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
@@ -53,10 +57,25 @@ public class MainActivity extends SlidingActivity implements TabListener,
 	SharedPreferences prefs;
 	ProgressDialog pd;
 	String name = null;
+	LinearLayout mainl;
+	
+	int imageIDs[]  = {
+			R.drawable.background_avril,
+			R.drawable.background_daddy_owen,
+			R.drawable.background_eko_dydda,
+			R.drawable.background_it,
+			R.drawable.background_joh_makini,
+			R.drawable.background_kambua,
+			R.drawable.background_kimya,
+			R.drawable.background_octopizzo,
+			R.drawable.background_mercy_masika
+	};
+	Random rand;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_main);
 		setBehindContentView(R.layout.slide);
 		SlidingMenu sm = getSlidingMenu();
@@ -68,6 +87,11 @@ public class MainActivity extends SlidingActivity implements TabListener,
 		sm.setFadeDegree(0.35f);
 		sm.setMenu(R.layout.slide);
 		prefs = getApplicationContext().getSharedPreferences("meprefs", 0);
+		rand = new Random();
+		
+		
+		
+		
 
 		ListView lv = (ListView) findViewById(R.id.slideList);
 		lv.setOnItemClickListener(new OnItemClickListener() {
@@ -134,9 +158,39 @@ public class MainActivity extends SlidingActivity implements TabListener,
 		super.onBackPressed();
 		Log.v("theback", "theback has been pressed");
 	}
-
+	private Handler uiCallback = new Handler () {
+	    public void handleMessage (Message msg) {
+	        // do stuff with UI
+	    	 
+	    	int im = rand.nextInt(8);
+	    	
+	    	if (mainl != null)
+	    		mainl.setBackgroundResource(imageIDs[im]);
+	    }
+	};
+	
 	private void init() {
-
+		
+		mainl = (LinearLayout) findViewById(R.id.mainll);
+		Thread timer = new Thread() {
+		    public void run () {
+		        for (;;) {
+		            // do stuff in a separate thread
+		            uiCallback.sendEmptyMessage(0);
+		            try {
+						Thread.sleep(3000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}    // sleep for 3 seconds
+		        }
+		    }
+		};
+		
+		timer.start();
+	
+		
+		
 		//startService(new Intent(MainActivity.this, bombaDownloader.class));
 		ListView playlists = (ListView) findViewById(R.id.listPlayLists);
 
@@ -164,6 +218,7 @@ public class MainActivity extends SlidingActivity implements TabListener,
 			// close the database
 			pickLists.close();
 			playlists.setAdapter(adp);
+				
 
 			playlists.setOnItemClickListener(new OnItemClickListener() {
 
@@ -189,6 +244,7 @@ public class MainActivity extends SlidingActivity implements TabListener,
 		@Override
 		protected void onPostExecute(Void result) {
 			pd.dismiss();
+			
 			super.onPostExecute(result);
 		}
 		
@@ -203,7 +259,7 @@ public class MainActivity extends SlidingActivity implements TabListener,
 				JSONArray parentArray = parentObject.getJSONArray("songs");
 				JSONObject childObject;
 				for (int i = 0; i < parentArray.length(); i++) {
-					childObject = parentArray.getJSONObject(i).getJSONObject(
+					childObject = parentArray.getJSONObject(i).getJSONObject(		
 							"song");
 					pickLists.open();
 					pickLists.AddSongsToLocalMaster(childObject.getInt("_id"),
@@ -336,6 +392,11 @@ public class MainActivity extends SlidingActivity implements TabListener,
 	protected void onResume() {
 
 		super.onResume();
+	}
+	
+	public void changeBackground()
+	{
+		
 	}
 
 	@Override

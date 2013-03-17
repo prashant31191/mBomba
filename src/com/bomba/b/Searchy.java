@@ -115,12 +115,12 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 			public void onItemClick(AdapterView<?> vi, View v, int pos,
 					long arg3) {
 				RelativeLayout relly = (RelativeLayout) v;
-				 TextView tv = ((TextView) findViewById(R.id.tv_songs_link));
+				 TextView tv = (TextView) relly.findViewById(R.id.tv_songs_link);
 				 String me = tv.getText().toString();
 				
 				 String aI = "http://109.74.201.47/content/" + me;
 				 String sName = me;
-				 Log.v("SONG NAME", pos+ " "+	me);
+				 Log.w("THIS IS WHAT YOU HAVE CLICKED ", pos+ " "+	me);
 				 String UR = "/mnt/sdcard/bomba/content/.music/" + me+".mp3";
 				 Intent view = new Intent(Searchy.this, Player_View.class);
 				 view.putExtra("artistImage", aI);
@@ -375,6 +375,12 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 				songConnection.connect();
 				
 				File song = new File(BC.bombaDir, params[0]);
+				if(song.exists())
+				{
+					Toast.makeText(Searchy.this, "song already sync~ed to another play list", Toast.LENGTH_LONG).show();
+				}
+				else
+				{
 				FileOutputStream fos = new FileOutputStream(song);
 				InputStream miInputStream = songConnection.getInputStream();
 				int fileSize = songConnection.getContentLength();
@@ -391,6 +397,7 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 				Log.d("DOWNLOADER", downloadedSize+"");
 				BC.Downloading = false;
 				fos.close();
+				}
 			} catch (Exception e) {
 				Log.d("bombaDownloader", e.toString());
 				e.printStackTrace();

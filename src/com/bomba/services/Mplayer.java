@@ -48,6 +48,8 @@ public class Mplayer extends Service implements OnAudioFocusChangeListener {
 
 		mp.stop();
 		mp.release();
+		mp = null;
+		
 		wLock.release();
 		stopForeground(true);
 		isPlaying = false;
@@ -147,7 +149,9 @@ public class Mplayer extends Service implements OnAudioFocusChangeListener {
 					Toast.makeText(getApplicationContext(),
 							"yo bro the song is over ", Toast.LENGTH_LONG)
 							.show();
+					mp.reset();
 
+					
 				}
 			});
 
@@ -164,6 +168,7 @@ public class Mplayer extends Service implements OnAudioFocusChangeListener {
 		pl.execute();
 
 	}
+	
 
 	public boolean audioChecker() {
 		AudioManager am = (AudioManager) getSystemService(getApplicationContext().AUDIO_SERVICE);
@@ -200,12 +205,13 @@ public class Mplayer extends Service implements OnAudioFocusChangeListener {
 		case AudioManager.AUDIOFOCUS_LOSS:
 			// Lost focus for an unbounded amount of time: stop playback and
 			// release media player
-			if (mp.isPlaying())
+			if (mp != null && mp.isPlaying()){
 				mp.stop();
 
-			mp.release();
+				mp.release();
 
-			mp = null;
+				mp = null;
+			}
 			stopForeground(true);
 			break;
 
