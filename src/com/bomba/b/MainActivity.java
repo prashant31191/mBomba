@@ -178,7 +178,7 @@ public class MainActivity extends SlidingActivity implements TabListener,
 		            // do stuff in a separate thread
 		            uiCallback.sendEmptyMessage(0);
 		            try {
-						Thread.sleep(3000);
+						Thread.sleep(20000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
