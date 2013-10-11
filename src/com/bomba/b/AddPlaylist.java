@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.bomba.R;
 import com.bomba.database.DbHelper;
-import com.slidingmenu.lib.app.SlidingActivity;
 
 public class AddPlaylist extends Activity implements OnClickListener {
 	static String TAG = "AddPL";

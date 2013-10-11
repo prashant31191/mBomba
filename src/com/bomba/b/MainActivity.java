@@ -1,5 +1,7 @@
 package com.bomba.b;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import org.apache.http.HttpResponse;
@@ -24,13 +26,14 @@ import com.easy.facebook.android.error.EasyFacebookError;
 import com.easy.facebook.android.facebook.FBLoginManager;
 import com.easy.facebook.android.facebook.Facebook;
 import com.easy.facebook.android.facebook.LoginListener;
-import com.slidingmenu.lib.SlidingMenu;
-import com.slidingmenu.lib.app.SlidingActivity;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import android.net.MailTo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -45,6 +48,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -178,7 +182,7 @@ public class MainActivity extends SlidingActivity implements TabListener,
 		            // do stuff in a separate thread
 		            uiCallback.sendEmptyMessage(0);
 		            try {
-						Thread.sleep(20000);
+						Thread.sleep(2000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -200,43 +204,64 @@ public class MainActivity extends SlidingActivity implements TabListener,
 		pickLists.open();
 		// get all the play lists
 
-		if (pickLists.getPlayLists().length == 0) {
-			Toast.makeText(MainActivity.this, "Create a playlist to continue",
-					Toast.LENGTH_LONG).show();
-			pd = ProgressDialog.show(MainActivity.this,
-					"Synchronizing the database",
-					"The world of music is coming right to you");
-			pd.setCancelable(false);
-			populatesongsFromOnline poppy = new populatesongsFromOnline();
-			poppy.execute();
+			if (pickLists.getPlayLists().length == 0) {
+				Toast.makeText(MainActivity.this, "Create a playlist to continue",
+						Toast.LENGTH_LONG).show();
+				pd = ProgressDialog.show(MainActivity.this,
+						"Synchronizing the database",
+						"The world of music is coming right to you");
+				pd.setCancelable(false);
+				populatesongsFromOnline poppy = new populatesongsFromOnline();
+				poppy.execute();
+	
+			} else {
+				//add the playlist details to the hashmap
+				final ArrayList<HashMap<String,String>> list = 
 
-		} else {
-
-			ArrayAdapter<String> adp = new ArrayAdapter<String>(
-					MainActivity.this, R.layout.playlist_row, R.id.tvPLName,
-					pickLists.getPlayLists());
-			// close the database
-			pickLists.close();
-			playlists.setAdapter(adp);
-				
-
-			playlists.setOnItemClickListener(new OnItemClickListener() {
-
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View view,
-						int pos, long arg3) {
-
-					String pname = ((TextView) view).getText().toString();
-					// Toast.makeText(MainActivity.this, pname,
-					// Toast.LENGTH_LONG).show();
-					Intent specList = new Intent(MainActivity.this,
-							Searchy.class);
-					specList.putExtra("p", pname);
-					startActivity(specList);
-
+						new ArrayList<HashMap<String,String>>();
+				for(int i=0; i<pickLists.getPlayLists().length; i++)
+				{
+					String p_name = pickLists.getPlayLists()[i];
+					HashMap<String, String> item = new HashMap<String, String>();
+					item.put("name", pickLists.getPlayLists()[i]);
+					item.put("amount", pickLists.getTracksInList(p_name).size()+"");
+					list.add(item);
 				}
-			});
-		}
+			
+				//use a simple adapter to map the items to the layout
+				SimpleAdapter mSimpleAdapter = new SimpleAdapter(
+						MainActivity.this,
+						list,	
+						R.layout.playlist_row,
+						new String[] {"name","amount"},
+						new int[]{R.id.tvPLName,R.id.tvSongs});
+	
+//				ArrayAdapter<String> adp = new ArrayAdapter<String>(
+//						MainActivity.this, R.layout.playlist_row, R.id.tvPLName,
+//						pickLists.getPlayLists());
+				// close the database
+				pickLists.close();
+				playlists.setAdapter(mSimpleAdapter);
+					
+	
+				playlists.setOnItemClickListener(new OnItemClickListener() {
+	
+					@Override
+					public void onItemClick(AdapterView<?> arg0, View view,
+							int pos, long arg3) {
+						TextView v = (TextView) (findViewById(R.id.tvPLName));
+						String pname = v.getText().toString();
+						//String pname = ((TextView) view).getText().toString();
+						// Toast.makeText(MainActivity.this, pname,
+						// Toast.LENGTH_LONG).show();
+						Intent specList = new Intent(MainActivity.this,
+								Searchy.class);
+						specList.putExtra("p", pname);
+						startActivity(specList);
+	
+					}
+				});
+			}
 
 	}
 

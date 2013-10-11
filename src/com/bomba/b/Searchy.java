@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -38,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
@@ -45,8 +45,8 @@ import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.bomba.R;
 import com.bomba.database.DbHelper;
 import com.bomba.services.Mplayer;
-import com.slidingmenu.lib.SlidingMenu;
-import com.slidingmenu.lib.app.SlidingActivity;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
 public class Searchy extends SlidingActivity implements OnQueryTextListener,
 		OnClickListener {
@@ -56,25 +56,20 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 	DbHelper pickTracks;
 	Button bPrev, bStop, bNext;
 	ApplicationController BC;
-	int imageIDs[]  = {
-			R.drawable.background_avril,
-			R.drawable.background_daddy_owen,
-			R.drawable.background_eko_dydda,
-			R.drawable.background_it,
-			R.drawable.background_joh_makini,
-			R.drawable.background_kambua,
-			R.drawable.background_kimya,
-			R.drawable.background_octopizzo,
-			R.drawable.background_mercy_masika
-	};
+	int imageIDs[] = { R.drawable.background_avril,
+			R.drawable.background_daddy_owen, R.drawable.background_eko_dydda,
+			R.drawable.background_it, R.drawable.background_joh_makini,
+			R.drawable.background_kambua, R.drawable.background_kimya,
+			R.drawable.background_octopizzo, R.drawable.background_mercy_masika };
 	Random rand;
 	LinearLayout mainl;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		pls = getIntent().getExtras().getString("p");
 		getSupportActionBar().setTitle(pls);
-		BC = (ApplicationController)getApplicationContext();
+		BC = (ApplicationController) getApplicationContext();
 		rand = new Random();
 
 		setContentView(R.layout.s_view);
@@ -88,7 +83,7 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 		sm.setFadeDegree(0.35f);
 		sm.setMenu(R.layout.slide);
 
-		// getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		init();
 
 		// set up the side list
@@ -115,35 +110,35 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 		});
 
 	}
-	private Handler uiCallback = new Handler () {
-	    public void handleMessage (Message msg) {
-	        // do stuff with UI
-	    	 
-	    	int im = rand.nextInt(8);
-	    	
-	    	if (mainl != null)
-	    		mainl.setBackgroundResource(imageIDs[im]);
-	    }
+
+	private Handler uiCallback = new Handler() {
+		public void handleMessage(Message msg) {
+			// do stuff with UI
+
+			int im = rand.nextInt(8);
+
+			if (mainl != null)
+				mainl.setBackgroundResource(imageIDs[im]);
+		}
 	};
 
 	private void init() {
-		
+
 		mainl = (LinearLayout) findViewById(R.id.sview);
 		Thread timer = new Thread() {
-		    public void run () {
-		        for (;;) {
-		            // do stuff in a separate thread
-		            uiCallback.sendEmptyMessage(0);
-		            try {
+			public void run() {
+				for (;;) {
+					// do stuff in a separate thread
+					uiCallback.sendEmptyMessage(0);
+					try {
 						Thread.sleep(20000);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}    // sleep for 3 seconds
-		        }
-		    }
+					} // sleep for 3 seconds
+				}
+			}
 		};
-		
+
 		timer.start();
 		bPrev = (Button) findViewById(R.id.Previous);
 		bStop = (Button) findViewById(R.id.Stop);
@@ -155,36 +150,40 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 		pickTracks = new DbHelper(Searchy.this);
 		pickTracks.open();
 		initpl();
+		//click listener for the initial playlist being the items on the list before any action is taken on the activity 
 		tracks.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> vi, View v, int pos,
 					long arg3) {
 				RelativeLayout relly = (RelativeLayout) v;
-				 TextView tv = (TextView) relly.findViewById(R.id.tv_songs_link);
-				 String me = tv.getText().toString();
-				
-				 String aI = "http://109.74.201.47/content/" + me;
-				 String sName = me;
-				 Log.w("THIS IS WHAT YOU HAVE CLICKED ", pos+ " "+	me);
-				 String UR = "/mnt/sdcard/bomba/content/.music/" + me+".mp3";
-				 Intent view = new Intent(Searchy.this, Player_View.class);
-				 view.putExtra("artistImage", aI);
-				 Intent sing = new Intent(Searchy.this, Mplayer.class);
-				 Log.d("DATASOURCE", UR);
-				 sing.putExtra("songName", sName);
-				 sing.putExtra("url", UR);
-				
-				 // startActivity(view);
-				 startService(sing);
-				
-				
+				TextView tv = (TextView) relly.findViewById(R.id.tv_songs_link);
+				String me = tv.getText().toString();
+
+				String aI = "http://109.74.201.47/content/" + me;
+				String sName = me;
+				Log.w("THIS IS WHAT YOU HAVE CLICKED ", pos + " " + me);
+				String UR = "/mnt/sdcard/bomba/content/.music/" + me + ".mp3";
+				Intent view = new Intent(Searchy.this, Player_View.class);
+				view.putExtra("artistImage", aI);
+				Intent sing = new Intent(Searchy.this, Mplayer.class);
+				Log.d("DATASOURCE", UR);
+				sing.putExtra("songName", sName);
+				sing.putExtra("url", UR);
+
+				startActivity(view);
+				startService(sing);
+
 			}
 		});
 
 	}
 
+	/*this loads the playlist from the database
+	 * 
+	 */
 	private void initpl() {
+		
 		// if (pickTracks.DoesPlaylistExist(pls)) {
 		loadList l = new loadList();
 		l.execute(pls);
@@ -194,7 +193,7 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 				Toast.LENGTH_LONG).show();
 		// }
 	}
-
+	//background thread to load the list from the database to the UI 
 	public class loadList extends AsyncTask<String, Void, Void> {
 		ArrayList<HashMap<String, String>> what;
 
@@ -211,15 +210,16 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 
 		@Override
 		protected void onPostExecute(Void result) {
-			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			if (what != null) {
 				Log.v("SEARCHYLOADER", what.size() + "");
-				SimpleAdapter adp = new SimpleAdapter(Searchy.this, what,
+				SimpleAdapter adp = new SimpleAdapter(
+						Searchy.this,
+						what,
 						R.layout.searchrow,
-						new String[] { pickTracks.A_STAGE_NAME,
-								pickTracks.TRACK_TITLE, pickTracks.TRACK_file },
-						new int[] { R.id.tvs_a_id, R.id.tv_songs_name,
+						new String[] { pickTracks.TRACK_TITLE,
+								pickTracks.A_STAGE_NAME, pickTracks.TRACK_file },
+						new int[] { R.id.tv_songs_name, R.id.tvs_a_id,
 								R.id.tv_songs_link });
 				tracks.setAdapter(adp);
 
@@ -230,41 +230,6 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 			}
 		}
 
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-
-		com.actionbarsherlock.widget.SearchView searchView = new com.actionbarsherlock.widget.SearchView(
-				getSupportActionBar().getThemedContext());
-		searchView.setQueryHint("Search for Track");
-		menu.add(0, 1, 1, "playlist")
-				.setIcon(R.drawable.action_bar_add_playlist)
-				.setActionView(searchView)
-				.setShowAsAction(
-						MenuItem.SHOW_AS_ACTION_IF_ROOM
-								| MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-
-		return true;
-	}
-
-	@SuppressLint("NewApi")
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
-		Log.v("SearchItem", item.getItemId() + "");
-
-		switch (item.getItemId()) {
-		case 1:
-
-			SearchView sv = (SearchView) item.getActionView();
-			sv.setOnQueryTextListener(this);
-
-			// onSearchRequested();
-			break;
-		}
-
-		return true;
 	}
 
 	@Override
@@ -289,6 +254,36 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		com.actionbarsherlock.widget.SearchView searchView = new com.actionbarsherlock.widget.SearchView(
+				getSupportActionBar().getThemedContext());
+		searchView.setQueryHint("Search for Track");
+		menu.add(0, 1, 1, "playlist")
+				.setIcon(R.drawable.action_bar_add_playlist)
+				.setActionView(searchView)
+				.setShowAsAction(
+						MenuItem.SHOW_AS_ACTION_IF_ROOM
+								| MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case 1:
+
+			SearchView sv = (SearchView) item.getActionView();
+			sv.setOnQueryTextListener(this);
+
+			// onSearchRequested();
+			break;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
 	public boolean onQueryTextSubmit(String query) {
 
 		// pull data from the cursor
@@ -305,6 +300,11 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 		return false;
 	}
 
+	/*loads the list after a search has happened 
+	 * this is where the magic or the fails happens
+	 *   
+	 */
+	
 	public class populateSongs extends AsyncTask<String, Void, Void> {
 		Cursor mCursor;
 
@@ -319,56 +319,55 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 				TextView header = new TextView(Searchy.this);
 				header.setText("long press to add to playlist");
 				tracks.invalidate();
-				//tracks.addHeaderView(header);
-				//tracks.addFooterView(header);
+				// tracks.addHeaderView(header);
+				// tracks.addFooterView(header);
+				@SuppressWarnings("deprecation")
 				ListAdapter adp = new SimpleCursorAdapter(
 						Searchy.this,
 						R.layout.searchrow,
 						mCursor,
-						new String[] { pickTracks.A_STAGE_NAME,
-								pickTracks.TRACK_TITLE, pickTracks.TRACK_file },
-						new int[] { R.id.tvs_a_id, R.id.tv_songs_name,
+						new String[] { pickTracks.TRACK_TITLE,
+								pickTracks.A_STAGE_NAME, pickTracks.TRACK_file },
+						new int[] { R.id.tv_songs_name, R.id.tvs_a_id,
 								R.id.tv_songs_link });
 				tracks.setAdapter(adp);
-				
 
 			}
 
 			super.onPostExecute(result);
-		}
+		}	
 
 		@Override
 		protected Void doInBackground(String... params) {
-			// TODO Auto-generated method stub
 			pickTracks.open();
 			mCursor = pickTracks.getSearched(params[0]);
 			Log.v("SEARCHY", mCursor.getCount() + "");
 			startManagingCursor(mCursor);
 
-//			 tracks.setOnItemClickListener(new OnItemClickListener() {
-//			
-//			 @Override
-//			 public void onItemClick(AdapterView<?> arg0, View v, int pos,
-//			 long arg3) {
-//			
-//			 RelativeLayout relly = (RelativeLayout) v;
-//			 TextView tv = ((TextView) findViewById(R.id.tv_songs_link));
-//			 String me = tv.getText().toString();
-//			
-//			 String aI = "http://109.74.201.47/content/" + me;
-//			 String sName = "your favorite Song";
-//			 String UR = "http://109.74.201.47/content/" + me+".mp3";
-//			 Intent view = new Intent(Searchy.this, Player_View.class);
-//			 view.putExtra("artistImage", aI);
-//			 Intent sing = new Intent(Searchy.this, Mplayer.class);
-//			 sing.putExtra("songName", sName);
-//			 sing.putExtra("url", UR);
-//			
-//			 // startActivity(view);
-//			 startService(sing);
-//			
-//			 }
-//			 });
+			// tracks.setOnItemClickListener(new OnItemClickListener() {
+			//
+			// @Override
+			// public void onItemClick(AdapterView<?> arg0, View v, int pos,
+			// long arg3) {
+			//
+			// RelativeLayout relly = (RelativeLayout) v;
+			// TextView tv = ((TextView) findViewById(R.id.tv_songs_link));
+			// String me = tv.getText().toString();
+			//
+			// String aI = "http://109.74.201.47/content/" + me;
+			// String sName = "your favorite Song";
+			// String UR = "http://109.74.201.47/content/" + me+".mp3";
+			// Intent view = new Intent(Searchy.this, Player_View.class);
+			// view.putExtra("artistImage", aI);
+			// Intent sing = new Intent(Searchy.this, Mplayer.class);
+			// sing.putExtra("songName", sName);
+			// sing.putExtra("url", UR);
+			//
+			// // startActivity(view);
+			// startService(sing);
+			//
+			// }
+			// });
 
 			tracks.setOnItemLongClickListener(new OnItemLongClickListener() {
 
@@ -381,77 +380,74 @@ public class Searchy extends SlidingActivity implements OnQueryTextListener,
 					pickTracks.open();
 					int pl_id = pickTracks.getPlaylistId(pls);
 					int tr_id = pickTracks.getTrackId(me);
-					try
-					{
-					pickTracks.AddSongToPlaylist(tr_id, pl_id, pls);
-					pickTracks.close();
+					try {
+						pickTracks.AddSongToPlaylist(tr_id, pl_id, pls);
+						pickTracks.close();
+					} catch (Exception e) {
+						Log.d("SQLEXCEPTION", e.toString() + " "
+								+ e.getCause().toString());
 					}
-					catch(Exception e)
-					{
-						Log.d("SQLEXCEPTION", e.toString()+" "+e.getCause().toString());
-					}
-				
+
 					Toast.makeText(Searchy.this,
 							me + " has been added to" + pls, Toast.LENGTH_LONG)
 							.show();
-					
+
 					initpl();
 					contentGetter cG = new contentGetter();
-					cG.execute(me+".mp3");
-					
+					cG.execute(me + ".mp3");
+
 					return false;
 				}
 			});
 			return null;
 		}
 	}
-	
-	public class contentGetter extends AsyncTask<String, Void, Void>
-	{
+
+	public class contentGetter extends AsyncTask<String, Void, Void> {
 
 		@Override
 		protected Void doInBackground(String... params) {
-			
+
 			try {
-				URL linkToSong = new URL("http://109.74.201.47/content/"+params[0]);
+				URL linkToSong = new URL("http://109.74.201.47/content/"
+						+ params[0]);
 				Log.d("GETTERURL", linkToSong.toString());
-				HttpURLConnection songConnection = (HttpURLConnection) linkToSong.openConnection();
+				HttpURLConnection songConnection = (HttpURLConnection) linkToSong
+						.openConnection();
 				songConnection.setRequestMethod("GET");
 				songConnection.setDoOutput(true);
 				songConnection.connect();
-				
+
 				File song = new File(BC.bombaDir, params[0]);
-				if(song.exists())
-				{
-					Toast.makeText(Searchy.this, "song already sync~ed to another play list", Toast.LENGTH_LONG).show();
-				}
-				else
-				{
-				FileOutputStream fos = new FileOutputStream(song);
-				InputStream miInputStream = songConnection.getInputStream();
-				int fileSize = songConnection.getContentLength();
-				int downloadedSize = 0;
-				byte[] buffer = new byte[1024];
-				int bufferLength = 0;
-				while((bufferLength = miInputStream.read(buffer))>0)
-				{
-					Log.d("DOWNLOADER", "the download has begun");
-					BC.Downloading = true;
-						fos.write(buffer,0,bufferLength);
+				if (song.exists()) {
+					Toast.makeText(Searchy.this,
+							"song already sync~ed to another play list",
+							Toast.LENGTH_LONG).show();
+				} else {
+					FileOutputStream fos = new FileOutputStream(song);
+					InputStream miInputStream = songConnection.getInputStream();
+					int fileSize = songConnection.getContentLength();
+					int downloadedSize = 0;
+					byte[] buffer = new byte[1024];
+					int bufferLength = 0;
+					while ((bufferLength = miInputStream.read(buffer)) > 0) {
+						Log.d("DOWNLOADER", "the download has begun");
+						BC.Downloading = true;
+						fos.write(buffer, 0, bufferLength);
 						downloadedSize += bufferLength;
-				}
-				Log.d("DOWNLOADER", downloadedSize+"");
-				BC.Downloading = false;
-				fos.close();
+					}
+					Log.d("DOWNLOADER", downloadedSize + "");
+					BC.Downloading = false;
+					fos.close();
 				}
 			} catch (Exception e) {
 				Log.d("bombaDownloader", e.toString());
 				e.printStackTrace();
 			}
-			
+
 			return null;
 		}
-		
+
 	}
 
 	@Override

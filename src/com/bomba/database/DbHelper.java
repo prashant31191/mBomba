@@ -217,7 +217,8 @@ public class DbHelper {
 		return p;
 	}
 
-	public long AddSongToPlaylist(int T_id, int p_id, String t_name) throws  SQLException {
+	public long AddSongToPlaylist(int T_id, int p_id, String t_name)
+			throws SQLException {
 		ContentValues playlistData = new ContentValues();
 		playlistData.put(PLAYLIST_DATA_TRACK_ID, T_id);
 		playlistData.put(PLAYLIST_DATA_PLAYLIST_ID, p_id);
@@ -265,13 +266,14 @@ public class DbHelper {
 	}
 
 	public ArrayList<HashMap<String, String>> getTracksInList(String p_name) {
-		String[] columns = new String[] { PLAYLIST_DATA_TRACK_ID,PLAYLIST_DATA_TRACK_NAME };
-		 Cursor getSearched = bombaDatabase.query(PLAYLIST_DATA, columns,
-		 PLAYLIST_DATA_TRACK_NAME +" = "+"\'"+ p_name+"\'",
-		 null, null, null, null);
-//		Cursor getSearched = bombaDatabase.rawQuery(
-//				"select * from tbl_playlist_data where playlist_name = '%"
-//						+ p_name + "%'", null);
+		String[] columns = new String[] { PLAYLIST_DATA_TRACK_ID,
+				PLAYLIST_DATA_TRACK_NAME };
+		Cursor getSearched = bombaDatabase.query(PLAYLIST_DATA, columns,
+				PLAYLIST_DATA_TRACK_NAME + " = " + "\'" + p_name + "\'", null,
+				null, null, null);
+		// Cursor getSearched = bombaDatabase.rawQuery(
+		// "select * from tbl_playlist_data where playlist_name = '%"
+		// + p_name + "%'", null);
 
 		Log.v("DATABASE",
 				"the tracks have been picked " + getSearched.getCount());
@@ -301,6 +303,8 @@ public class DbHelper {
 						gett.getString(gett.getColumnIndex(TRACK_TITLE)));
 				map.put(TRACK_file,
 						gett.getString(gett.getColumnIndex(TRACK_file)));
+				map.put(IMAGE_file,
+						gett.getString(gett.getColumnIndex(IMAGE_file)));
 				list.add(map);
 			}
 		}
@@ -386,7 +390,7 @@ public class DbHelper {
 
 			}
 		} else {
-			tracksMap = null;
+			return tracksMap = null;
 		}
 
 		// since we have a list of track ids now we can load our hashmap with

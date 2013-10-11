@@ -2,8 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/remove_item"
+        android:id="@+id/menuPlayist"
+        android:actionViewClass="com.actionbarsherlock.widget.SearchView"
         android:icon="@drawable/action_bar_add_playlist"
-        android:title="Add to Playlist"/>
+        android:showAsAction="always|withText"
+        android:title="Playlist">
+    </item>
 
 </menu>

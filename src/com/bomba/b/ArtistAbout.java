@@ -10,7 +10,7 @@ import com.actionbarsherlock.app.ActionBar.TabListener;
 
 import com.actionbarsherlock.view.MenuItem;
 import com.bomba.R;
-import com.slidingmenu.lib.app.SlidingActivity;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
 public class ArtistAbout extends SlidingActivity implements TabListener {
 

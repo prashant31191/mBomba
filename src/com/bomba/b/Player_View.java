@@ -6,7 +6,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import com.bomba.R;
-import com.slidingmenu.lib.app.SlidingActivity;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
 import android.app.Activity;
 import android.graphics.Bitmap;

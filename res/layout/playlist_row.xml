@@ -1,11 +1,37 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tvPLName"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentTop="true"
-    android:textStyle="bold"
-    android:textSize="16dp"
-    android:paddingBottom="20dp"
-    android:textAppearance="?android:attr/textAppearanceMedium"
-    android:textColor="@color/black" />
+     >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/playlistimage" />
+
+    <TextView
+        android:id="@+id/tvPLName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:paddingBottom="20dp"
+        android:text="Name"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvSongs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvPLName"
+        android:layout_alignParentRight="true"
+        android:textSize="15dp"
+        android:textColor="@color/black"
+        android:text="12" />
+
+</RelativeLayout>

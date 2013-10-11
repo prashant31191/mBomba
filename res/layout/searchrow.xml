@@ -5,23 +5,28 @@
     android:layout_height="match_parent" >
 
     
-    <TextView
-        android:id="@+id/tv_songs_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tvs_a_id"
-         android:textSize="16dp"
-         />
-    
-    <TextView
+   
+     <TextView
         android:id="@+id/tvs_a_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:textSize="16dp"
+        android:text="artist id"
+        android:textStyle="bold"
+        android:textSize="18dp"
          />
+    <TextView
+        android:id="@+id/tv_songs_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="song name"
+        android:layout_below="@+id/tvs_a_id"
+         android:textSize="16dp"
+         />
+    
+   
 
     
 
@@ -30,6 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:text="link"
         android:layout_below="@+id/tv_songs_name"
         android:visibility="invisible"
         android:tag="thelink"
@@ -40,12 +46,19 @@
         android:id="@+id/tv_songs_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="id"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tv_songs_link"
          android:textSize="16dp"
-         android:text="Album"
+         
          />
 
-    
+    <ImageView
+        android:id="@+id/artistImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/playcontroladd" />
 
 </RelativeLayout>
